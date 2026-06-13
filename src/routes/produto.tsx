@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import jersey1 from "@/assets/jersey-1.png.asset.json";
 import jersey2 from "@/assets/jersey-2.png.asset.json";
 import jersey3 from "@/assets/jersey-3.png.asset.json";
+import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
 
 export const Route = createFileRoute("/produto")({
   head: () => ({
@@ -105,7 +106,7 @@ function ProductPage() {
         <div className="nba-teamshop">
           <div className="nba-teamshop-inner">
             <div className="nba-teamshop-left">
-              <div className="knicks-logo">🏀</div>
+              <div className="knicks-logo"><img src={knicksLogo.url} alt="New York Knicks" /></div>
               <div className="teamshop-text">
                 <div className="ts-title">TEAM SHOP</div>
                 <div className="ts-sub">A <em>Fanatics</em> Experience</div>
@@ -447,7 +448,8 @@ const css = `
 .nba-teamshop { background: #1d428a; color: #fff; }
 .nba-teamshop-inner { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; max-width: 1280px; margin: 0 auto; }
 .nba-teamshop-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.knicks-logo { width: 44px; height: 44px; background: #fff; border-radius: 50%; display: grid; place-items: center; font-size: 22px; flex-shrink: 0; }
+.knicks-logo { width: 48px; height: 48px; display: grid; place-items: center; flex-shrink: 0; }
+.knicks-logo img { width: 100%; height: 100%; object-fit: contain; }
 .teamshop-text .ts-title { font-family: 'Barlow Condensed', sans-serif; font-style: italic; font-weight: 800; font-size: 22px; line-height: 1; letter-spacing: 0.5px; }
 .teamshop-text .ts-sub { font-size: 10px; opacity: 0.9; margin-top: 2px; }
 .teamshop-text .ts-sub em { font-style: normal; font-weight: 700; }
