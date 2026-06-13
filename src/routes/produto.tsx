@@ -15,7 +15,7 @@ export const Route = createFileRoute("/produto")({
 });
 
 const ORIGINAL_PRICE = 149.9;
-const FLOOR_PRICE = 59.9;
+const SALE_PRICE = 59.9;
 const SIZES = ["S", "M", "L", "XL", "2XL", "3XL"];
 const IMAGES = [jersey1.url, jersey2.url, jersey3.url, jersey1.url];
 
@@ -70,11 +70,10 @@ function ProductPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const finalPrice = useMemo(
-    () => (discount > 0 ? Math.max(ORIGINAL_PRICE - discount, FLOOR_PRICE) : ORIGINAL_PRICE),
-    [discount]
-  );
-  const hasDiscount = discount > 0;
+  const finalPrice = SALE_PRICE;
+  const savings = ORIGINAL_PRICE - SALE_PRICE;
+  const hasDiscount = true;
+  void discount;
 
   const mm = String(Math.floor(timeLeft / 60)).padStart(2, "0");
   const ss = String(timeLeft % 60).padStart(2, "0");
@@ -94,24 +93,70 @@ function ProductPage() {
 
       {/* HEADER */}
       <header className="nba-header">
-        <div className="nba-header-inner">
-          <div className="nba-header-left">
-            <div className="nba-logo">NBA</div>
-            <nav className="nba-nav">
-              {["Knicks", "Jerseys", "Apparel", "Accessories", "Sale"].map((l) => (
-                <a key={l} href="#">{l}</a>
-              ))}
-            </nav>
+        {/* Promo strip */}
+        <div className="nba-promo">
+          <div className="nba-promo-cell nba-promo-1">
+            <strong>WHEN THERE'S A TRIPLE-DOUBLE IN THE NBA PLAYOFFS:</strong>
           </div>
-          <div className="nba-header-right">
-            <span aria-hidden>🔍</span>
-            <span aria-hidden>♡</span>
-            <span className="nba-cart" aria-label={`Cart with ${cart} items`}>
-              🛒<span className="nba-cart-badge">{cart}</span>
-            </span>
+          <div className="nba-promo-cell nba-promo-2">
+            <div className="promo-title">AMEX® CARD MEMBERS<br /><span className="big">GET 32% OFF</span></div>
+            <div className="promo-sub">ELIGIBLE MERCH AT NBASTORE.COM*</div>
+          </div>
+          <div className="nba-promo-cell nba-promo-3">
+            <div>USE YOUR AMEX CARD<br />& CODE: <strong>AMEX32</strong></div>
+            <div className="promo-fine">*24-hour offer, starting at 9am ET the next day. Terms apply.</div>
+          </div>
+          <div className="nba-promo-cell nba-promo-4">
+            <span className="badge-nba">NBA</span>
+            <span className="badge-amex">AMEX</span>
           </div>
         </div>
-        <div className="nba-header-stripe" />
+
+        {/* Secondary nav */}
+        <div className="nba-subnav">
+          <a href="#">WNBA</a><span>|</span>
+          <a href="#">NBA G LEAGUE</a><span>|</span>
+          <a href="#">Tap To Watch</a>
+        </div>
+
+        {/* Team Shop bar */}
+        <div className="nba-teamshop">
+          <div className="nba-teamshop-inner">
+            <div className="nba-teamshop-left">
+              <div className="knicks-logo">🏀</div>
+              <div className="teamshop-text">
+                <div className="ts-title">TEAM SHOP</div>
+                <div className="ts-sub">A <em>Fanatics</em> Experience</div>
+              </div>
+            </div>
+            <div className="nba-teamshop-center">
+              <span className="badge-nba">NBA</span>
+              <span className="badge-amex">AMEX</span>
+            </div>
+            <div className="nba-teamshop-right">
+              <span aria-hidden>👤</span>
+              <span className="nba-cart" aria-label={`Cart with ${cart} items`}>
+                🛒<span className="nba-cart-badge">{cart}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Orange nav */}
+        <div className="nba-orangenav">
+          <div className="nba-orangenav-inner">
+            <a href="#">Men</a>
+            <a href="#">Women</a>
+            <a href="#">Kids</a>
+            <a href="#">More</a>
+            <span className="search-ico" aria-hidden>🔍</span>
+          </div>
+        </div>
+
+        {/* Quiz unlock strip (replaces SIGN UP & SAVE 10%) */}
+        <div className="nba-quizstrip">
+          QUIZ DISCOUNT UNLOCKED
+        </div>
       </header>
 
       <div className="nba-container">
@@ -162,7 +207,7 @@ function ProductPage() {
             <span className="nba-edicao-badge">🏆 COMMEMORATIVE EDITION — 2026 KNICKS CHAMPIONS</span>
 
             <h1 className="nba-title">
-              NEW YORK KNICKS 2026 NBA FINALS<br />OFFICIAL COMMEMORATIVE JERSEY
+              UNISEX NEW YORK KNICKS JALEN BRUNSON NIKE BLUE 2026 NBA FINALS PATCH SWINGMAN JERSEY — ICON EDITION
             </h1>
 
             <a href="#reviews" className="nba-rating">
@@ -179,7 +224,7 @@ function ProductPage() {
                   </div>
                   <div className="nba-price-row">
                     <span className="muted">Your quiz discount:</span>
-                    <span className="green-bold">-{fmt(discount)}</span>
+                    <span className="green-bold">-{fmt(savings)}</span>
                   </div>
                   <div className="nba-price-divider" />
                 </>
@@ -409,18 +454,62 @@ const css = `
 .nba-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
 
 /* HEADER */
-.nba-header { position: sticky; top: 0; z-index: 1000; background: #000; }
-.nba-header-inner { max-width: 1280px; margin: 0 auto; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
-.nba-header-left { display: flex; align-items: center; gap: 32px; }
-.nba-logo { color: #fff; font-family: 'Barlow Condensed'; font-weight: 800; font-style: italic; font-size: 24px; letter-spacing: 1px; }
-.nba-nav { display: flex; gap: 22px; }
-.nba-nav a { color: #fff; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; font-weight: 500; }
-.nba-nav a:hover { color: #F58426; }
-@media (max-width: 768px) { .nba-nav { display: none; } }
-.nba-header-right { display: flex; gap: 18px; color: #fff; font-size: 18px; align-items: center; }
+.nba-header { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+
+/* Promo strip */
+.nba-promo { display: grid; grid-template-columns: 1.2fr 1.4fr 1.6fr 0.8fr; background: #0a2756; color: #fff; min-height: 64px; }
+.nba-promo-cell { padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid rgba(255,255,255,0.15); font-size: 11px; line-height: 1.25; }
+.nba-promo-cell:last-child { border-right: none; }
+.nba-promo-1 strong { font-weight: 800; text-transform: uppercase; font-size: 12px; }
+.nba-promo-2 { background: #001f4d; align-items: center; text-align: center; }
+.nba-promo-2 .promo-title { font-weight: 700; text-transform: uppercase; font-size: 11px; }
+.nba-promo-2 .promo-title .big { font-size: 18px; font-weight: 800; }
+.nba-promo-2 .promo-sub { font-size: 9px; opacity: 0.9; margin-top: 2px; }
+.nba-promo-3 { font-size: 11px; }
+.nba-promo-3 strong { color: #fff; font-weight: 800; }
+.nba-promo-3 .promo-fine { font-size: 8px; opacity: 0.7; margin-top: 4px; }
+.nba-promo-4 { flex-direction: row; align-items: center; justify-content: center; gap: 6px; background: #fff; }
+.badge-nba { background: #fff; color: #c8102e; font-weight: 800; font-size: 11px; padding: 4px 6px; border: 1px solid #ddd; }
+.badge-amex { background: #006fcf; color: #fff; font-weight: 800; font-size: 11px; padding: 4px 6px; letter-spacing: 0.5px; }
+
+/* Sub nav */
+.nba-subnav { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 12px 16px; background: #fff; font-size: 14px; font-weight: 600; color: #000; }
+.nba-subnav a { color: #000; text-decoration: none; }
+.nba-subnav span { color: #ccc; }
+
+/* Team shop bar */
+.nba-teamshop { background: #1d428a; color: #fff; }
+.nba-teamshop-inner { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; max-width: 1280px; margin: 0 auto; }
+.nba-teamshop-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.knicks-logo { width: 44px; height: 44px; background: #fff; border-radius: 50%; display: grid; place-items: center; font-size: 22px; flex-shrink: 0; }
+.teamshop-text .ts-title { font-family: 'Barlow Condensed', sans-serif; font-style: italic; font-weight: 800; font-size: 22px; line-height: 1; letter-spacing: 0.5px; }
+.teamshop-text .ts-sub { font-size: 10px; opacity: 0.9; margin-top: 2px; }
+.teamshop-text .ts-sub em { font-style: normal; font-weight: 700; }
+.nba-teamshop-center { display: flex; gap: 6px; }
+.nba-teamshop-right { display: flex; gap: 16px; font-size: 22px; align-items: center; }
 .nba-cart { position: relative; }
 .nba-cart-badge { position: absolute; top: -6px; right: -10px; background: #F58426; color: #000; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 10px; }
-.nba-header-stripe { height: 3px; background: #F58426; }
+
+/* Orange nav */
+.nba-orangenav { background: #F58426; }
+.nba-orangenav-inner { max-width: 1280px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; gap: 32px; }
+.nba-orangenav a { color: #fff; font-weight: 700; font-size: 20px; text-decoration: none; text-transform: capitalize; }
+.nba-orangenav a:hover { text-decoration: underline; }
+.nba-orangenav .search-ico { margin-left: auto; color: #fff; font-size: 22px; }
+
+/* Quiz unlock strip */
+.nba-quizstrip { background: #1d428a; color: #fff; text-align: center; padding: 14px; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+
+@media (max-width: 768px) {
+  .nba-promo { grid-template-columns: 1fr 1fr 1fr 0.5fr; }
+  .nba-promo-cell { font-size: 9px; padding: 6px 8px; }
+  .nba-promo-2 .promo-title .big { font-size: 14px; }
+  .nba-subnav { font-size: 13px; gap: 10px; }
+  .teamshop-text .ts-title { font-size: 18px; }
+  .nba-orangenav-inner { gap: 20px; padding: 12px; }
+  .nba-orangenav a { font-size: 16px; }
+  .nba-quizstrip { font-size: 13px; padding: 12px; }
+}
 
 /* CRUMB */
 .nba-crumb { display: flex; gap: 8px; align-items: center; padding: 12px 0; font-size: 12px; color: #767676; flex-wrap: wrap; }
