@@ -466,17 +466,30 @@ const css = `
 
 /* Team shop bar */
 .nba-teamshop { background: #1d428a; color: #fff; }
-.nba-teamshop-inner { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; max-width: 1280px; margin: 0 auto; }
-.nba-teamshop-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.knicks-logo { width: 48px; height: 48px; display: grid; place-items: center; flex-shrink: 0; }
+.nba-teamshop-inner { display: flex; align-items: center; padding: 14px 24px; max-width: 1280px; margin: 0 auto; gap: 16px; }
+.nba-teamshop-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.knicks-logo { width: 56px; height: 56px; display: grid; place-items: center; flex-shrink: 0; }
 .knicks-logo img { width: 100%; height: 100%; object-fit: contain; }
-.teamshop-text .ts-title { font-family: 'Barlow Condensed', sans-serif; font-style: italic; font-weight: 800; font-size: 22px; line-height: 1; letter-spacing: 0.5px; }
-.teamshop-text .ts-sub { font-size: 10px; opacity: 0.9; margin-top: 2px; }
-.teamshop-text .ts-sub em { font-style: normal; font-weight: 700; }
-.nba-teamshop-center { display: flex; gap: 6px; }
-.nba-teamshop-right { display: flex; gap: 16px; font-size: 22px; align-items: center; }
-.nba-cart { position: relative; }
-.nba-cart-badge { position: absolute; top: -6px; right: -10px; background: #F58426; color: #000; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 10px; }
+.ts-dot { color: #fff; font-size: 22px; line-height: 1; opacity: 0.9; }
+.teamshop-text .ts-title { font-family: 'Barlow Condensed', 'Oswald', sans-serif; font-style: italic; font-weight: 800; font-size: 28px; line-height: 1; letter-spacing: 1px; color: #fff; }
+.teamshop-text .ts-sub { font-size: 11px; opacity: 0.95; margin-top: 4px; letter-spacing: 0.3px; }
+.teamshop-text .ts-sub .fanatics { font-weight: 700; font-style: italic; }
+.nba-teamshop-center { display: flex; align-items: center; gap: 10px; margin-left: 8px; }
+.badge-nba { display: inline-flex; align-items: center; justify-content: center; background: #fff; border-radius: 3px; padding: 2px; }
+.badge-amex { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; background: #2E77BB; color: #fff; font-family: 'Arial Black', sans-serif; font-weight: 900; font-size: 11px; line-height: 1; padding: 4px 6px; border-radius: 3px; letter-spacing: 0.5px; }
+.badge-amex .amex-top, .badge-amex .amex-bot { display: block; }
+.badge-amex .amex-bot { margin-top: 1px; }
+.nba-teamshop-right { display: flex; gap: 18px; align-items: center; color: #fff; margin-left: auto; }
+.nba-cart { position: relative; display: inline-flex; }
+.nba-cart-badge { position: absolute; top: -4px; right: -8px; background: #F58426; color: #000; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 10px; min-width: 16px; text-align: center; }
+@media (max-width: 768px) {
+  .nba-teamshop-inner { padding: 10px 12px; gap: 8px; }
+  .knicks-logo { width: 44px; height: 44px; }
+  .teamshop-text .ts-title { font-size: 22px; }
+  .nba-teamshop-center { gap: 6px; margin-left: 4px; }
+  .nba-teamshop-right { gap: 12px; }
+}
+
 
 /* Orange nav */
 .nba-orangenav { background: #F58426; }
