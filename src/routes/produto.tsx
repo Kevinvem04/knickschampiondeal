@@ -1,11 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
+import jersey1 from "@/assets/jersey-1.png.asset.json";
+import jersey2 from "@/assets/jersey-2.png.asset.json";
+import jersey3 from "@/assets/jersey-3.png.asset.json";
 
 export const Route = createFileRoute("/produto")({
   head: () => ({
     meta: [
       { title: "New York Knicks 2026 NBA Finals Jersey — NBA Store" },
-      { name: "description", content: "Jersey oficial comemorativa dos New York Knicks campeões da NBA 2026. Edição limitada." },
+      { name: "description", content: "Official commemorative jersey of the New York Knicks 2026 NBA Champions. Limited edition." },
     ],
   }),
   component: ProductPage,
@@ -14,8 +17,9 @@ export const Route = createFileRoute("/produto")({
 const ORIGINAL_PRICE = 149.9;
 const FLOOR_PRICE = 59.9;
 const SIZES = ["S", "M", "L", "XL", "2XL", "3XL"];
+const IMAGES = [jersey1.url, jersey2.url, jersey3.url, jersey1.url];
 
-const fmt = (n: number) => `$${n.toFixed(2).replace(".", ",")}`;
+const fmt = (n: number) => `$${n.toFixed(2)}`;
 
 function ProductPage() {
   const [discount, setDiscount] = useState(0);
@@ -102,7 +106,7 @@ function ProductPage() {
           <div className="nba-header-right">
             <span aria-hidden>🔍</span>
             <span aria-hidden>♡</span>
-            <span className="nba-cart" aria-label={`Carrinho com ${cart} itens`}>
+            <span className="nba-cart" aria-label={`Cart with ${cart} items`}>
               🛒<span className="nba-cart-badge">{cart}</span>
             </span>
           </div>
@@ -132,23 +136,22 @@ function ProductPage() {
               onMouseLeave={() => setZoom((z) => ({ ...z, on: false }))}
             >
               <span className="nba-finals-badge">NBA FINALS 2026 CHAMPION</span>
-              <div
-                className="nba-img-placeholder"
-                style={zoom.on ? { transform: `scale(1.6)`, transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined}
-              >
-                BLUSA KNICKS 2026
-                <span className="thumb-idx">#{activeThumb + 1}</span>
-              </div>
+              <img
+                src={IMAGES[activeThumb]}
+                alt="New York Knicks 2026 NBA Finals Jersey"
+                className="nba-img"
+                style={zoom.on ? { transform: `scale(1.8)`, transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined}
+              />
             </div>
             <div className="nba-thumbs">
-              {[0, 1, 2, 3].map((i) => (
+              {IMAGES.map((src, i) => (
                 <button
                   key={i}
                   className={`nba-thumb ${activeThumb === i ? "active" : ""}`}
                   onClick={() => setActiveThumb(i)}
-                  aria-label={`Imagem ${i + 1}`}
+                  aria-label={`Image ${i + 1}`}
                 >
-                  {i + 1}
+                  <img src={src} alt="" />
                 </button>
               ))}
             </div>
@@ -156,14 +159,14 @@ function ProductPage() {
 
           {/* PANEL */}
           <div className="nba-panel" ref={panelRef}>
-            <span className="nba-edicao-badge">🏆 EDIÇÃO COMEMORATIVA — KNICKS CAMPEÕES 2026</span>
+            <span className="nba-edicao-badge">🏆 COMMEMORATIVE EDITION — 2026 KNICKS CHAMPIONS</span>
 
             <h1 className="nba-title">
-              NEW YORK KNICKS 2026 NBA FINALS<br />JERSEY OFICIAL COMEMORATIVA
+              NEW YORK KNICKS 2026 NBA FINALS<br />OFFICIAL COMMEMORATIVE JERSEY
             </h1>
 
             <a href="#reviews" className="nba-rating">
-              <span className="stars">★★★★★</span> 4.8 <span className="muted">(1.247 avaliações)</span>
+              <span className="stars">★★★★★</span> 4.8 <span className="muted">(1,247 reviews)</span>
             </a>
 
             {/* PRICE */}
@@ -171,30 +174,30 @@ function ProductPage() {
               {hasDiscount && (
                 <>
                   <div className="nba-price-row">
-                    <span className="muted">Preço original:</span>
+                    <span className="muted">Original price:</span>
                     <span className="strike">{fmt(ORIGINAL_PRICE)}</span>
                   </div>
                   <div className="nba-price-row">
-                    <span className="muted">Seu desconto do quiz:</span>
+                    <span className="muted">Your quiz discount:</span>
                     <span className="green-bold">-{fmt(discount)}</span>
                   </div>
                   <div className="nba-price-divider" />
                 </>
               )}
               <div className="nba-price-final-row">
-                <span className="label-final">PREÇO CONQUISTADO:</span>
+                <span className="label-final">YOUR PRICE:</span>
                 <span className="price-final">{fmt(finalPrice)}</span>
               </div>
               {hasDiscount && (
-                <p className="nba-quiz-note">🏆 Desconto conquistado no Quiz do Torcedor</p>
+                <p className="nba-quiz-note">🏆 Discount earned in the Fan Quiz</p>
               )}
             </div>
 
             {/* SIZE */}
             <div className="nba-section">
               <div className="nba-section-head">
-                <span>SELECIONE O TAMANHO:</span>
-                <a href="#" className="nba-size-guide">Guia de Tamanhos ↗</a>
+                <span>SELECT SIZE:</span>
+                <a href="#" className="nba-size-guide">Size Guide ↗</a>
               </div>
               <div className="nba-sizes">
                 {SIZES.map((s) => (
@@ -212,7 +215,7 @@ function ProductPage() {
             {/* QTY */}
             {size && (
               <div className="nba-section">
-                <div className="nba-section-head"><span>QUANTIDADE:</span></div>
+                <div className="nba-section-head"><span>QUANTITY:</span></div>
                 <div className="nba-qty">
                   <button onClick={() => setQty((q) => Math.max(1, q - 1))}>−</button>
                   <span>{qty}</span>
@@ -227,35 +230,35 @@ function ProductPage() {
               disabled={!canBuy}
               onClick={handleAdd}
             >
-              {added ? "✓ ADICIONADO" : "ADICIONAR AO CARRINHO"}
+              {added ? "✓ ADDED TO CART" : "ADD TO CART"}
             </button>
             <button className="nba-btn nba-btn-buy" disabled={!canBuy}>
-              COMPRAR AGORA
+              BUY NOW
             </button>
 
             {/* COUNTDOWN */}
             <div className={`nba-countdown ${expired ? "expired" : ""}`}>
               {expired ? (
-                <p>Oferta expirada — <a href="/">recomece o quiz</a> para um novo desconto</p>
+                <p>Offer expired — <a href="/">retake the quiz</a> for a new discount</p>
               ) : (
-                <>⏱ Oferta expira em: <strong>00h : {mm}m : {ss}s</strong></>
+                <>⏱ Offer expires in: <strong>00h : {mm}m : {ss}s</strong></>
               )}
             </div>
 
             {/* WISH/SHARE */}
             <div className="nba-wish">
               <button onClick={() => setWished((w) => !w)}>
-                {wished ? "♥" : "♡"} Adicionar à lista de desejos
+                {wished ? "♥" : "♡"} Add to wishlist
               </button>
-              <button>↗ Compartilhar</button>
+              <button>↗ Share</button>
             </div>
 
             {/* TRUST */}
             <ul className="nba-trust">
-              <li>🚚 Frete grátis acima de $75</li>
-              <li>🔄 Devolução grátis em 30 dias</li>
-              <li>🔒 Pagamento 100% seguro</li>
-              <li>✅ Produto oficial NBA / Nike</li>
+              <li>🚚 Free shipping on orders over $75</li>
+              <li>🔄 Free 30-day returns</li>
+              <li>🔒 100% secure payment</li>
+              <li>✅ Official NBA / Nike product</li>
             </ul>
           </div>
         </div>
@@ -263,25 +266,25 @@ function ProductPage() {
         {/* ACCORDIONS */}
         <section className="nba-accordions">
           {[
-            { id: "details", label: "Detalhes do produto", body: [
-              "Jersey Swingman oficial Nike",
-              "Patch comemorativo 2026 NBA Finals bordado",
-              "Tecnologia Dri-FIT para controle de temperatura",
-              "100% poliéster reciclado",
-              "Patch de campeão no ombro direito",
-              "Numeração e nome em tackle twill",
-              "Importado",
+            { id: "details", label: "Product details", body: [
+              "Official Nike Swingman Jersey",
+              "Embroidered 2026 NBA Finals commemorative patch",
+              "Dri-FIT technology for temperature control",
+              "100% recycled polyester",
+              "Champions patch on the right shoulder",
+              "Name and number in tackle twill",
+              "Imported",
             ]},
-            { id: "fit", label: "Tamanho e ajuste", body: [
-              "Modelagem regular unissex",
-              "Referência: tamanho M veste do P ao M",
-              "Consulte o guia de tamanhos para dúvidas",
+            { id: "fit", label: "Size & fit", body: [
+              "Regular unisex fit",
+              "Reference: size M fits S to M",
+              "Check the size guide if in doubt",
             ]},
-            { id: "ship", label: "Entrega e devoluções", body: [
-              "Frete grátis em pedidos acima de $75",
-              "Entrega em 3-5 dias úteis",
-              "Devolução gratuita em até 30 dias",
-              "Produto oficial — garantia de autenticidade",
+            { id: "ship", label: "Shipping & returns", body: [
+              "Free shipping on orders over $75",
+              "Delivery in 3-5 business days",
+              "Free returns within 30 days",
+              "Official product — authenticity guaranteed",
             ]},
           ].map((a) => (
             <div key={a.id} className={`nba-acc ${open[a.id] ? "open" : ""}`}>
@@ -307,15 +310,15 @@ function ProductPage() {
             <div className="nba-reviews-summary">
               <div className="big">4.8</div>
               <div className="stars">★★★★★</div>
-              <div className="muted">de 5 estrelas</div>
-              <div className="muted">1.247 avaliações</div>
+              <div className="muted">out of 5 stars</div>
+              <div className="muted">1,247 reviews</div>
             </div>
             <div className="nba-bars">
               {[
                 [5, 76], [4, 18], [3, 4], [2, 1], [1, 1],
               ].map(([s, p]) => (
                 <div key={s} className="bar-row">
-                  <span>{s} estrelas</span>
+                  <span>{s} stars</span>
                   <div className="bar"><div style={{ width: `${p}%` }} /></div>
                   <span>{p}%</span>
                 </div>
@@ -325,16 +328,16 @@ function ProductPage() {
 
           <div className="nba-review-cards">
             {[
-              { n: "Carlos M.", c: "São Paulo", d: "2 dias", t: "Incrível qualidade!", b: "A blusa chegou perfeita, o patch do campeonato é lindo." },
-              { n: "Marina S.", c: "Rio de Janeiro", d: "5 dias", t: "Sonho realizado", b: "Esperei tanto por esse título, e a jersey é digna do momento." },
-              { n: "João P.", c: "Belo Horizonte", d: "1 semana", t: "Tecido excelente", b: "Bem leve, modelagem perfeita. Recomendo." },
+              { n: "Michael R.", c: "Brooklyn, NY", d: "2 days ago", t: "Incredible quality!", b: "Jersey arrived perfect, the championship patch looks amazing." },
+              { n: "Sarah K.", c: "Manhattan, NY", d: "5 days ago", t: "Dream come true", b: "Waited so long for this title — the jersey lives up to the moment." },
+              { n: "James L.", c: "Queens, NY", d: "1 week ago", t: "Excellent fabric", b: "Very lightweight, perfect fit. Highly recommend." },
             ].map((r) => (
               <article key={r.n} className="nba-review">
                 <div className="stars">★★★★★</div>
                 <h3>"{r.t}"</h3>
                 <div className="meta">{r.n} · {r.c} · {r.d}</div>
                 <p>"{r.b}"</p>
-                <div className="verified">✓ Compra verificada</div>
+                <div className="verified">✓ Verified purchase</div>
               </article>
             ))}
           </div>
@@ -344,19 +347,19 @@ function ProductPage() {
       {/* RELATED */}
       <section className="nba-related">
         <div className="nba-container">
-          <h2>VOCÊ TAMBÉM PODE GOSTAR</h2>
+          <h2>YOU MAY ALSO LIKE</h2>
           <div className="nba-related-grid">
             {[
-              { n: "Knicks 2026 Champions Hoodie", p: 89.9 },
-              { n: "Knicks Finals Cap Snapback", p: 39.9 },
-              { n: "Knicks Champions T-Shirt", p: 34.9 },
-              { n: "Knicks Banner 2026 Poster", p: 24.9 },
+              { n: "Knicks 2026 Champions Hoodie", p: 89.9, img: jersey2.url },
+              { n: "Knicks Finals Snapback Cap", p: 39.9, img: jersey3.url },
+              { n: "Knicks Champions T-Shirt", p: 34.9, img: jersey1.url },
+              { n: "Knicks 2026 Banner Poster", p: 24.9, img: jersey2.url },
             ].map((p) => (
               <div key={p.n} className="nba-related-card">
-                <div className="img">KNICKS</div>
+                <div className="img"><img src={p.img} alt={p.n} /></div>
                 <div className="name">{p.n}</div>
                 <div className="price">{fmt(p.p)}</div>
-                <button>Adicionar</button>
+                <button>Add to cart</button>
               </div>
             ))}
           </div>
@@ -369,32 +372,32 @@ function ProductPage() {
           <div className="nba-footer-grid">
             <div className="nba-footer-logo">NBA</div>
             <div>
-              <h4>Minha Conta</h4>
-              <ul><li>Pedidos</li><li>Lista de Desejos</li><li>Endereços</li></ul>
+              <h4>My Account</h4>
+              <ul><li>Orders</li><li>Wishlist</li><li>Addresses</li></ul>
             </div>
             <div>
-              <h4>Ajuda</h4>
-              <ul><li>FAQ</li><li>Devoluções</li><li>Contato</li></ul>
+              <h4>Help</h4>
+              <ul><li>FAQ</li><li>Returns</li><li>Contact</li></ul>
             </div>
             <div>
-              <h4>Sobre</h4>
-              <ul><li>Parceiros</li><li>Política</li><li>Privacidade</li></ul>
+              <h4>About</h4>
+              <ul><li>Partners</li><li>Policy</li><li>Privacy</li></ul>
             </div>
           </div>
           <div className="nba-pay">VISA · MASTERCARD · AMEX · PAYPAL · APPLE PAY</div>
-          <div className="nba-copy">© 2026 NBA Store · Todos os direitos reservados</div>
+          <div className="nba-copy">© 2026 NBA Store · All rights reserved</div>
         </div>
       </footer>
 
       {/* STICKY MOBILE BAR */}
       {showSticky && (
         <div className="nba-sticky-bar">
-          <div className="img">P</div>
+          <div className="img"><img src={jersey1.url} alt="" /></div>
           <div className="info">
             <div className="n">KNICKS JERSEY 2026</div>
             <div className="p">{fmt(finalPrice)}</div>
           </div>
-          <button disabled={!canBuy}>COMPRAR</button>
+          <button disabled={!canBuy}>BUY NOW</button>
         </div>
       )}
     </div>
@@ -413,13 +416,14 @@ const css = `
 .nba-nav { display: flex; gap: 22px; }
 .nba-nav a { color: #fff; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; font-weight: 500; }
 .nba-nav a:hover { color: #F58426; }
+@media (max-width: 768px) { .nba-nav { display: none; } }
 .nba-header-right { display: flex; gap: 18px; color: #fff; font-size: 18px; align-items: center; }
 .nba-cart { position: relative; }
 .nba-cart-badge { position: absolute; top: -6px; right: -10px; background: #F58426; color: #000; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 10px; }
 .nba-header-stripe { height: 3px; background: #F58426; }
 
 /* CRUMB */
-.nba-crumb { display: flex; gap: 8px; align-items: center; padding: 12px 0; font-size: 12px; color: #767676; }
+.nba-crumb { display: flex; gap: 8px; align-items: center; padding: 12px 0; font-size: 12px; color: #767676; flex-wrap: wrap; }
 .nba-crumb a { color: #767676; text-decoration: none; }
 .nba-crumb a:hover { color: #006BB6; }
 .nba-crumb span { color: #ccc; }
@@ -432,11 +436,11 @@ const css = `
 
 /* GALLERY */
 .nba-img-main { position: relative; aspect-ratio: 4/5; background: #F5F5F5; overflow: hidden; cursor: zoom-in; }
-.nba-img-placeholder { width: 100%; height: 100%; background: #E8F0F8; display: flex; align-items: center; justify-content: center; color: #006BB6; font-family: 'Barlow Condensed'; font-weight: 700; font-style: italic; font-size: 32px; text-align: center; transition: transform 0.1s; position: relative; }
-.thumb-idx { position: absolute; bottom: 16px; right: 16px; font-size: 14px; color: #767676; font-family: 'Inter'; font-style: normal; }
+.nba-img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.1s; padding: 16px; }
 .nba-finals-badge { position: absolute; top: 16px; left: 16px; background: #006BB6; color: #fff; font-size: 11px; font-weight: 700; padding: 6px 10px; letter-spacing: 0.5px; z-index: 2; }
 .nba-thumbs { display: flex; gap: 8px; margin-top: 12px; overflow-x: auto; }
-.nba-thumb { width: 80px; height: 80px; min-width: 80px; background: #F5F5F5; border: 1px solid #E5E5E5; cursor: pointer; color: #767676; font-weight: 600; }
+.nba-thumb { width: 80px; height: 80px; min-width: 80px; background: #F5F5F5; border: 1px solid #E5E5E5; cursor: pointer; padding: 4px; }
+.nba-thumb img { width: 100%; height: 100%; object-fit: contain; }
 .nba-thumb.active { border: 2px solid #006BB6; }
 
 /* PANEL */
@@ -528,8 +532,9 @@ const css = `
 .nba-related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 @media (max-width: 768px) { .nba-related-grid { grid-template-columns: repeat(2, 1fr); } }
 .nba-related-card { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-.nba-related-card .img { aspect-ratio: 1; background: #E8F0F8; color: #006BB6; display: grid; place-items: center; font-family: 'Barlow Condensed'; font-style: italic; font-weight: 700; transition: transform 0.2s; overflow: hidden; }
-.nba-related-card:hover .img { transform: scale(1.03); }
+.nba-related-card .img { aspect-ratio: 1; background: #F5F5F5; overflow: hidden; }
+.nba-related-card .img img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.2s; }
+.nba-related-card:hover .img img { transform: scale(1.03); }
 .nba-related-card .name { font-size: 13px; color: #333; }
 .nba-related-card .price { font-weight: 700; color: #006BB6; }
 .nba-related-card button { background: #000; color: #fff; border: none; padding: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
@@ -549,7 +554,8 @@ const css = `
 /* STICKY BAR */
 .nba-sticky-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 64px; background: #000; display: none; align-items: center; gap: 12px; padding: 0 12px; z-index: 999; }
 @media (max-width: 768px) { .nba-sticky-bar { display: flex; } }
-.nba-sticky-bar .img { width: 44px; height: 44px; background: #E8F0F8; color: #006BB6; display: grid; place-items: center; font-weight: 700; }
+.nba-sticky-bar .img { width: 44px; height: 44px; background: #F5F5F5; overflow: hidden; }
+.nba-sticky-bar .img img { width: 100%; height: 100%; object-fit: contain; }
 .nba-sticky-bar .info { flex: 1; color: #fff; min-width: 0; }
 .nba-sticky-bar .info .n { font-size: 12px; font-weight: 600; }
 .nba-sticky-bar .info .p { font-size: 16px; color: #F58426; font-weight: 700; }
