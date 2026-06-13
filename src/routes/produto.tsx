@@ -122,10 +122,6 @@ function ProductPage() {
                   <path d="M22 8h6c2 0 3 1 3 3v6c0 1-1 2-2 2 1 0 2 1 2 2v6c0 2-1 3-3 3h-6V8zm4 4v6h2v-6h-2zm0 10v6h2v-6h-2z" fill="#1D428A"/>
                 </svg>
               </span>
-              <span className="badge-amex" aria-label="American Express">
-                <span className="amex-top">AM</span>
-                <span className="amex-bot">EX</span>
-              </span>
             </div>
             <div className="nba-teamshop-right">
               <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
@@ -476,9 +472,6 @@ const css = `
 .teamshop-text .ts-sub .fanatics { font-weight: 700; font-style: italic; }
 .nba-teamshop-center { display: flex; align-items: center; gap: 10px; margin-left: 8px; }
 .badge-nba { display: inline-flex; align-items: center; justify-content: center; background: #fff; border-radius: 3px; padding: 2px; }
-.badge-amex { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; background: #2E77BB; color: #fff; font-family: 'Arial Black', sans-serif; font-weight: 900; font-size: 11px; line-height: 1; padding: 4px 6px; border-radius: 3px; letter-spacing: 0.5px; }
-.badge-amex .amex-top, .badge-amex .amex-bot { display: block; }
-.badge-amex .amex-bot { margin-top: 1px; }
 .nba-teamshop-right { display: flex; gap: 18px; align-items: center; color: #fff; margin-left: auto; }
 .nba-cart { position: relative; display: inline-flex; }
 .nba-cart-badge { position: absolute; top: -4px; right: -8px; background: #F58426; color: #000; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 10px; min-width: 16px; text-align: center; }
