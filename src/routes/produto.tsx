@@ -466,10 +466,10 @@ const css = `
 
 /* Orange nav */
 .nba-orangenav { background: #F58426; }
-.nba-orangenav-inner { max-width: 1280px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; gap: 32px; }
-.nba-orangenav a { color: #fff; font-weight: 700; font-size: 20px; text-decoration: none; text-transform: capitalize; }
+.nba-orangenav-inner { max-width: 1280px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 24px; }
+.nba-orangenav a { color: #fff; font-weight: 700; font-size: 16px; text-decoration: none; text-transform: capitalize; }
 .nba-orangenav a:hover { text-decoration: underline; }
-.nba-orangenav .search-ico { margin-left: auto; color: #fff; font-size: 22px; }
+.nba-orangenav .search-ico { margin-left: auto; color: #fff; font-size: 18px; }
 
 /* Quiz unlock strip */
 .nba-quizstrip { background: #1d428a; color: #fff; text-align: center; padding: 14px; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
