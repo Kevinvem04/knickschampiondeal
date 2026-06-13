@@ -15,7 +15,7 @@ export const Route = createFileRoute("/produto")({
 });
 
 const ORIGINAL_PRICE = 149.9;
-const FLOOR_PRICE = 59.9;
+const SALE_PRICE = 59.9;
 const SIZES = ["S", "M", "L", "XL", "2XL", "3XL"];
 const IMAGES = [jersey1.url, jersey2.url, jersey3.url, jersey1.url];
 
