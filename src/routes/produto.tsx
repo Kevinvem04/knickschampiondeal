@@ -95,12 +95,6 @@ function ProductPage() {
       {/* HEADER */}
       <header className="nba-header">
 
-        {/* Secondary nav */}
-        <div className="nba-subnav">
-          <a href="#">WNBA</a><span>|</span>
-          <a href="#">NBA G LEAGUE</a><span>|</span>
-          <a href="#">Tap To Watch</a>
-        </div>
 
         {/* Team Shop bar */}
         <div className="nba-teamshop">
