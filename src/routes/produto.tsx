@@ -102,47 +102,51 @@ function ProductPage() {
           <a href="#">Tap To Watch</a>
         </div>
 
-        {/* Team Shop bar */}
-        <div className="nba-teamshop">
-          <div className="nba-teamshop-inner">
-            <div className="nba-teamshop-left">
-              <div className="knicks-logo"><img src={knicksLogo.url} alt="New York Knicks" /></div>
-              <span className="ts-dot" aria-hidden>•</span>
-              <div className="teamshop-text">
-                <div className="ts-title">TEAM SHOP</div>
-                <div className="ts-sub">A <span className="fanatics">≈ Fanatics</span> Experience</div>
-              </div>
+        {/* Main bar */}
+        <div className="nba-mainbar">
+          <div className="nba-mainbar-inner">
+            <a href="#" className="nba-logo" aria-label="New York Knicks">
+              <img src={knicksLogo.url} alt="New York Knicks" />
+            </a>
+            <div className="nba-search">
+              <form className="nba-search-form" role="search" onSubmit={(e) => e.preventDefault()}>
+                <input
+                  type="text"
+                  className="nba-search-input"
+                  placeholder="What can we help you find?"
+                  aria-label="What can we help you find?"
+                />
+                <button type="submit" className="nba-search-btn" aria-label="Search">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 32 32" aria-hidden>
+                    <path fill="currentColor" fillRule="evenodd" d="M19.329 20.743A9.96 9.96 0 0 1 13 23C7.477 23 3 18.523 3 13S7.477 3 13 3s10 4.477 10 10a9.96 9.96 0 0 1-2.257 6.329l6.964 6.964a1 1 0 0 1-1.414 1.414zM21 13a8 8 0 1 1-16 0 8 8 0 0 1 16 0" clipRule="evenodd"/>
+                  </svg>
+                </button>
+              </form>
             </div>
-            <div className="nba-teamshop-center">
-              <span className="ts-dot" aria-hidden>•</span>
-              <span className="badge-nba" aria-label="NBA">
-                <svg viewBox="0 0 40 40" width="28" height="28" aria-hidden>
-                  <rect width="40" height="40" rx="3" fill="#fff"/>
-                  <path d="M10 8h5l4 10V8h5v24h-5l-4-10v10h-5V8z" fill="#C8102E"/>
-                  <path d="M22 8h6c2 0 3 1 3 3v6c0 1-1 2-2 2 1 0 2 1 2 2v6c0 2-1 3-3 3h-6V8zm4 4v6h2v-6h-2zm0 10v6h2v-6h-2z" fill="#1D428A"/>
-                </svg>
-              </span>
-              <span className="badge-amex" aria-label="American Express">
-                <span className="amex-top">AM</span>
-                <span className="amex-bot">EX</span>
-              </span>
+            <div className="nba-promo" aria-hidden>
+              <span className="promo-badge promo-nba">NBA</span>
+              <span className="promo-badge promo-amex">AMEX</span>
             </div>
-            <div className="nba-teamshop-right">
-              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
-                <circle cx="12" cy="8" r="4"/>
-                <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
-              </svg>
-              <span className="nba-cart" aria-label={`Cart with ${cart} items`}>
-                <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
-                  <path d="M3 5h3l2.4 12.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.5L22 8H7"/>
-                  <circle cx="10" cy="22" r="1.2"/>
-                  <circle cx="19" cy="22" r="1.2"/>
+            <div className="nba-toolbar">
+              <a href="#" aria-label="Account" className="nba-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 32 32" aria-hidden>
+                  <g fill="currentColor" fillRule="evenodd" clipRule="evenodd">
+                    <path d="M16 18a5 5 0 1 0 0-10 5 5 0 0 0 0 10m0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                    <path d="M16 30c7.732 0 14-6.268 14-14S23.732 2 16 2 2 8.268 2 16s6.268 14 14 14m9.2-6.296A11.95 11.95 0 0 0 28 16c0-6.627-5.373-12-12-12S4 9.373 4 16c0 2.933 1.052 5.62 2.8 7.704.555-.91 1.42-1.763 2.666-2.55 1.743-1.1 4.187-1.6 6.534-1.6s4.79.5 6.534 1.6c1.246.787 2.111 1.64 2.667 2.55Zm-1.479 1.482c-.314-.727-.961-1.524-2.255-2.34-1.313-.83-3.341-1.293-5.466-1.293s-4.153.464-5.466 1.293c-1.294.816-1.94 1.613-2.255 2.34A11.95 11.95 0 0 0 16 28c2.94 0 5.634-1.058 7.721-2.814"/>
+                  </g>
                 </svg>
-                <span className="nba-cart-badge">{cart}</span>
-              </span>
+              </a>
+              <a href="#" aria-label={`Cart with ${cart} items`} className="nba-icon nba-cart">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" viewBox="0 0 32 32" aria-hidden>
+                  <g fill="currentColor">
+                    <path fillRule="evenodd" d="M3.429 3a.929.929 0 0 0 0 1.857h2.085l3.443 12.05-1.766 5.3a.93.93 0 0 0 .88 1.222h15.786a.929.929 0 1 0 0-1.857H9.36l1.238-3.715h14.188c.41 0 .771-.269.89-.662L28.46 7.91a.928.928 0 0 0-.89-1.196H7.976l-.869-3.04A.93.93 0 0 0 6.214 3zm7.2 13L8.507 8.571h17.816L24.095 16z" clipRule="evenodd"/>
+                    <path d="M11.786 27.143a1.857 1.857 0 1 1-3.715 0 1.857 1.857 0 0 1 3.715 0M22.929 29a1.857 1.857 0 1 0 0-3.714 1.857 1.857 0 0 0 0 3.714"/>
+                  </g>
+                </svg>
+                {cart > 0 && <span className="nba-cart-badge">{cart}</span>}
+              </a>
             </div>
           </div>
-
         </div>
 
         {/* Orange nav */}
@@ -464,30 +468,29 @@ const css = `
 .nba-subnav a { color: #000; text-decoration: none; }
 .nba-subnav span { color: #ccc; }
 
-/* Team shop bar */
-.nba-teamshop { background: #1d428a; color: #fff; }
-.nba-teamshop-inner { display: flex; align-items: center; padding: 14px 24px; max-width: 1280px; margin: 0 auto; gap: 16px; }
-.nba-teamshop-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
-.knicks-logo { width: 56px; height: 56px; display: grid; place-items: center; flex-shrink: 0; }
-.knicks-logo img { width: 100%; height: 100%; object-fit: contain; }
-.ts-dot { color: #fff; font-size: 22px; line-height: 1; opacity: 0.9; }
-.teamshop-text .ts-title { font-family: 'Barlow Condensed', 'Oswald', sans-serif; font-style: italic; font-weight: 800; font-size: 28px; line-height: 1; letter-spacing: 1px; color: #fff; }
-.teamshop-text .ts-sub { font-size: 11px; opacity: 0.95; margin-top: 4px; letter-spacing: 0.3px; }
-.teamshop-text .ts-sub .fanatics { font-weight: 700; font-style: italic; }
-.nba-teamshop-center { display: flex; align-items: center; gap: 10px; margin-left: 8px; }
-.badge-nba { display: inline-flex; align-items: center; justify-content: center; background: #fff; border-radius: 3px; padding: 2px; }
-.badge-amex { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; background: #2E77BB; color: #fff; font-family: 'Arial Black', sans-serif; font-weight: 900; font-size: 11px; line-height: 1; padding: 4px 6px; border-radius: 3px; letter-spacing: 0.5px; }
-.badge-amex .amex-top, .badge-amex .amex-bot { display: block; }
-.badge-amex .amex-bot { margin-top: 1px; }
-.nba-teamshop-right { display: flex; gap: 18px; align-items: center; color: #fff; margin-left: auto; }
-.nba-cart { position: relative; display: inline-flex; }
+/* Main bar */
+.nba-mainbar { background: #fff; border-bottom: 1px solid #e5e5e5; }
+.nba-mainbar-inner { max-width: 1280px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 24px; }
+.nba-logo { display: inline-flex; flex-shrink: 0; }
+.nba-logo img { width: 64px; height: 64px; object-fit: contain; display: block; }
+.nba-search { flex: 1; min-width: 0; }
+.nba-search-form { display: flex; align-items: center; border: 1px solid #c4c4c4; border-radius: 4px; overflow: hidden; background: #fff; }
+.nba-search-input { flex: 1; min-width: 0; border: 0; outline: none; padding: 12px 14px; font-size: 14px; color: #111; background: transparent; }
+.nba-search-input::placeholder { color: #6b6b6b; }
+.nba-search-btn { background: transparent; border: 0; padding: 0 14px; height: 44px; display: inline-flex; align-items: center; justify-content: center; color: #111; cursor: pointer; }
+.nba-promo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.promo-badge { display: inline-flex; align-items: center; justify-content: center; font-family: 'Arial Black', sans-serif; font-weight: 900; border-radius: 3px; letter-spacing: 0.5px; }
+.promo-nba { background: #C8102E; color: #fff; padding: 6px 10px; font-size: 14px; }
+.promo-amex { background: #2E77BB; color: #fff; padding: 6px 10px; font-size: 12px; }
+.nba-toolbar { display: flex; align-items: center; gap: 16px; color: #111; flex-shrink: 0; }
+.nba-icon { color: #111; display: inline-flex; position: relative; }
 .nba-cart-badge { position: absolute; top: -4px; right: -8px; background: #F58426; color: #000; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 10px; min-width: 16px; text-align: center; }
 @media (max-width: 768px) {
-  .nba-teamshop-inner { padding: 10px 12px; gap: 8px; }
-  .knicks-logo { width: 44px; height: 44px; }
-  .teamshop-text .ts-title { font-size: 22px; }
-  .nba-teamshop-center { gap: 6px; margin-left: 4px; }
-  .nba-teamshop-right { gap: 12px; }
+  .nba-mainbar-inner { padding: 10px 12px; gap: 10px; flex-wrap: wrap; }
+  .nba-logo img { width: 44px; height: 44px; }
+  .nba-promo { display: none; }
+  .nba-search { order: 3; flex-basis: 100%; }
+  .nba-toolbar { gap: 12px; margin-left: auto; }
 }
 
 
@@ -503,7 +506,6 @@ const css = `
 
 @media (max-width: 768px) {
   .nba-subnav { font-size: 13px; gap: 10px; }
-  .teamshop-text .ts-title { font-size: 18px; }
   .nba-orangenav-inner { gap: 20px; padding: 12px; }
   .nba-orangenav a { font-size: 16px; }
   .nba-quizstrip { font-size: 13px; padding: 12px; }
