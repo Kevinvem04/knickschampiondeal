@@ -506,7 +506,6 @@ const css = `
 
 @media (max-width: 768px) {
   .nba-subnav { font-size: 13px; gap: 10px; }
-  .teamshop-text .ts-title { font-size: 18px; }
   .nba-orangenav-inner { gap: 20px; padding: 12px; }
   .nba-orangenav a { font-size: 16px; }
   .nba-quizstrip { font-size: 13px; padding: 12px; }
