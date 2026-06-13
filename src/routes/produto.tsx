@@ -122,10 +122,6 @@ function ProductPage() {
                   <path d="M22 8h6c2 0 3 1 3 3v6c0 1-1 2-2 2 1 0 2 1 2 2v6c0 2-1 3-3 3h-6V8zm4 4v6h2v-6h-2zm0 10v6h2v-6h-2z" fill="#1D428A"/>
                 </svg>
               </span>
-              <span className="badge-amex" aria-label="American Express">
-                <span className="amex-top">AM</span>
-                <span className="amex-bot">EX</span>
-              </span>
             </div>
             <div className="nba-teamshop-right">
               <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
