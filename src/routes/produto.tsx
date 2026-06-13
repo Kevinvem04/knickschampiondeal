@@ -95,12 +95,6 @@ function ProductPage() {
       {/* HEADER */}
       <header className="nba-header">
 
-        {/* Secondary nav */}
-        <div className="nba-subnav">
-          <a href="#">WNBA</a><span>|</span>
-          <a href="#">NBA G LEAGUE</a><span>|</span>
-          <a href="#">Tap To Watch</a>
-        </div>
 
         {/* Team Shop bar */}
         <div className="nba-teamshop">
@@ -447,11 +441,6 @@ const css = `
 /* HEADER */
 .nba-header { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
 
-/* Sub nav */
-.nba-subnav { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 12px 16px; background: #fff; font-size: 14px; font-weight: 600; color: #000; }
-.nba-subnav a { color: #000; text-decoration: none; }
-.nba-subnav span { color: #ccc; }
-
 /* Team shop bar */
 .nba-teamshop { background: #1d428a; color: #fff; }
 .nba-teamshop-inner { display: flex; align-items: center; padding: 14px 24px; max-width: 1280px; margin: 0 auto; gap: 16px; }
@@ -486,7 +475,6 @@ const css = `
 .nba-quizstrip { background: #1d428a; color: #fff; text-align: center; padding: 14px; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
 
 @media (max-width: 768px) {
-  .nba-subnav { font-size: 13px; gap: 10px; }
   .teamshop-text .ts-title { font-size: 18px; }
   .nba-orangenav-inner { gap: 20px; padding: 12px; }
   .nba-orangenav a { font-size: 16px; }
