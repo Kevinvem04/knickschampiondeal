@@ -114,14 +114,6 @@ function ProductPage() {
               </div>
             </div>
             <div className="nba-teamshop-center">
-              <span className="ts-dot" aria-hidden>•</span>
-              <span className="badge-nba" aria-label="NBA">
-                <svg viewBox="0 0 40 40" width="28" height="28" aria-hidden>
-                  <rect width="40" height="40" rx="3" fill="#fff"/>
-                  <path d="M10 8h5l4 10V8h5v24h-5l-4-10v10h-5V8z" fill="#C8102E"/>
-                  <path d="M22 8h6c2 0 3 1 3 3v6c0 1-1 2-2 2 1 0 2 1 2 2v6c0 2-1 3-3 3h-6V8zm4 4v6h2v-6h-2zm0 10v6h2v-6h-2z" fill="#1D428A"/>
-                </svg>
-              </span>
             </div>
             <div className="nba-teamshop-right">
               <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
