@@ -454,18 +454,62 @@ const css = `
 .nba-container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
 
 /* HEADER */
-.nba-header { position: sticky; top: 0; z-index: 1000; background: #000; }
-.nba-header-inner { max-width: 1280px; margin: 0 auto; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; }
-.nba-header-left { display: flex; align-items: center; gap: 32px; }
-.nba-logo { color: #fff; font-family: 'Barlow Condensed'; font-weight: 800; font-style: italic; font-size: 24px; letter-spacing: 1px; }
-.nba-nav { display: flex; gap: 22px; }
-.nba-nav a { color: #fff; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; text-decoration: none; font-weight: 500; }
-.nba-nav a:hover { color: #F58426; }
-@media (max-width: 768px) { .nba-nav { display: none; } }
-.nba-header-right { display: flex; gap: 18px; color: #fff; font-size: 18px; align-items: center; }
+.nba-header { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+
+/* Promo strip */
+.nba-promo { display: grid; grid-template-columns: 1.2fr 1.4fr 1.6fr 0.8fr; background: #0a2756; color: #fff; min-height: 64px; }
+.nba-promo-cell { padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid rgba(255,255,255,0.15); font-size: 11px; line-height: 1.25; }
+.nba-promo-cell:last-child { border-right: none; }
+.nba-promo-1 strong { font-weight: 800; text-transform: uppercase; font-size: 12px; }
+.nba-promo-2 { background: #001f4d; align-items: center; text-align: center; }
+.nba-promo-2 .promo-title { font-weight: 700; text-transform: uppercase; font-size: 11px; }
+.nba-promo-2 .promo-title .big { font-size: 18px; font-weight: 800; }
+.nba-promo-2 .promo-sub { font-size: 9px; opacity: 0.9; margin-top: 2px; }
+.nba-promo-3 { font-size: 11px; }
+.nba-promo-3 strong { color: #fff; font-weight: 800; }
+.nba-promo-3 .promo-fine { font-size: 8px; opacity: 0.7; margin-top: 4px; }
+.nba-promo-4 { flex-direction: row; align-items: center; justify-content: center; gap: 6px; background: #fff; }
+.badge-nba { background: #fff; color: #c8102e; font-weight: 800; font-size: 11px; padding: 4px 6px; border: 1px solid #ddd; }
+.badge-amex { background: #006fcf; color: #fff; font-weight: 800; font-size: 11px; padding: 4px 6px; letter-spacing: 0.5px; }
+
+/* Sub nav */
+.nba-subnav { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 12px 16px; background: #fff; font-size: 14px; font-weight: 600; color: #000; }
+.nba-subnav a { color: #000; text-decoration: none; }
+.nba-subnav span { color: #ccc; }
+
+/* Team shop bar */
+.nba-teamshop { background: #1d428a; color: #fff; }
+.nba-teamshop-inner { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; max-width: 1280px; margin: 0 auto; }
+.nba-teamshop-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.knicks-logo { width: 44px; height: 44px; background: #fff; border-radius: 50%; display: grid; place-items: center; font-size: 22px; flex-shrink: 0; }
+.teamshop-text .ts-title { font-family: 'Barlow Condensed', sans-serif; font-style: italic; font-weight: 800; font-size: 22px; line-height: 1; letter-spacing: 0.5px; }
+.teamshop-text .ts-sub { font-size: 10px; opacity: 0.9; margin-top: 2px; }
+.teamshop-text .ts-sub em { font-style: normal; font-weight: 700; }
+.nba-teamshop-center { display: flex; gap: 6px; }
+.nba-teamshop-right { display: flex; gap: 16px; font-size: 22px; align-items: center; }
 .nba-cart { position: relative; }
 .nba-cart-badge { position: absolute; top: -6px; right: -10px; background: #F58426; color: #000; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 10px; }
-.nba-header-stripe { height: 3px; background: #F58426; }
+
+/* Orange nav */
+.nba-orangenav { background: #F58426; }
+.nba-orangenav-inner { max-width: 1280px; margin: 0 auto; padding: 14px 16px; display: flex; align-items: center; gap: 32px; }
+.nba-orangenav a { color: #fff; font-weight: 700; font-size: 20px; text-decoration: none; text-transform: capitalize; }
+.nba-orangenav a:hover { text-decoration: underline; }
+.nba-orangenav .search-ico { margin-left: auto; color: #fff; font-size: 22px; }
+
+/* Quiz unlock strip */
+.nba-quizstrip { background: #1d428a; color: #fff; text-align: center; padding: 14px; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+
+@media (max-width: 768px) {
+  .nba-promo { grid-template-columns: 1fr 1fr 1fr 0.5fr; }
+  .nba-promo-cell { font-size: 9px; padding: 6px 8px; }
+  .nba-promo-2 .promo-title .big { font-size: 14px; }
+  .nba-subnav { font-size: 13px; gap: 10px; }
+  .teamshop-text .ts-title { font-size: 18px; }
+  .nba-orangenav-inner { gap: 20px; padding: 12px; }
+  .nba-orangenav a { font-size: 16px; }
+  .nba-quizstrip { font-size: 13px; padding: 12px; }
+}
 
 /* CRUMB */
 .nba-crumb { display: flex; gap: 8px; align-items: center; padding: 12px 0; font-size: 12px; color: #767676; flex-wrap: wrap; }
