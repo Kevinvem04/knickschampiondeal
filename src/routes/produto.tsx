@@ -207,7 +207,7 @@ function ProductPage() {
             <span className="nba-edicao-badge">🏆 COMMEMORATIVE EDITION — 2026 KNICKS CHAMPIONS</span>
 
             <h1 className="nba-title">
-              NEW YORK KNICKS 2026 NBA FINALS<br />OFFICIAL COMMEMORATIVE JERSEY
+              UNISEX NEW YORK KNICKS JALEN BRUNSON NIKE BLUE 2026 NBA FINALS PATCH SWINGMAN JERSEY — ICON EDITION
             </h1>
 
             <a href="#reviews" className="nba-rating">
