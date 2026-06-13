@@ -70,11 +70,10 @@ function ProductPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const finalPrice = useMemo(
-    () => (discount > 0 ? Math.max(ORIGINAL_PRICE - discount, FLOOR_PRICE) : ORIGINAL_PRICE),
-    [discount]
-  );
-  const hasDiscount = discount > 0;
+  const finalPrice = SALE_PRICE;
+  const savings = ORIGINAL_PRICE - SALE_PRICE;
+  const hasDiscount = true;
+  void discount;
 
   const mm = String(Math.floor(timeLeft / 60)).padStart(2, "0");
   const ss = String(timeLeft % 60).padStart(2, "0");
