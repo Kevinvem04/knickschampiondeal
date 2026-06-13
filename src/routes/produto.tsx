@@ -93,24 +93,70 @@ function ProductPage() {
 
       {/* HEADER */}
       <header className="nba-header">
-        <div className="nba-header-inner">
-          <div className="nba-header-left">
-            <div className="nba-logo">NBA</div>
-            <nav className="nba-nav">
-              {["Knicks", "Jerseys", "Apparel", "Accessories", "Sale"].map((l) => (
-                <a key={l} href="#">{l}</a>
-              ))}
-            </nav>
+        {/* Promo strip */}
+        <div className="nba-promo">
+          <div className="nba-promo-cell nba-promo-1">
+            <strong>WHEN THERE'S A TRIPLE-DOUBLE IN THE NBA PLAYOFFS:</strong>
           </div>
-          <div className="nba-header-right">
-            <span aria-hidden>🔍</span>
-            <span aria-hidden>♡</span>
-            <span className="nba-cart" aria-label={`Cart with ${cart} items`}>
-              🛒<span className="nba-cart-badge">{cart}</span>
-            </span>
+          <div className="nba-promo-cell nba-promo-2">
+            <div className="promo-title">AMEX® CARD MEMBERS<br /><span className="big">GET 32% OFF</span></div>
+            <div className="promo-sub">ELIGIBLE MERCH AT NBASTORE.COM*</div>
+          </div>
+          <div className="nba-promo-cell nba-promo-3">
+            <div>USE YOUR AMEX CARD<br />& CODE: <strong>AMEX32</strong></div>
+            <div className="promo-fine">*24-hour offer, starting at 9am ET the next day. Terms apply.</div>
+          </div>
+          <div className="nba-promo-cell nba-promo-4">
+            <span className="badge-nba">NBA</span>
+            <span className="badge-amex">AMEX</span>
           </div>
         </div>
-        <div className="nba-header-stripe" />
+
+        {/* Secondary nav */}
+        <div className="nba-subnav">
+          <a href="#">WNBA</a><span>|</span>
+          <a href="#">NBA G LEAGUE</a><span>|</span>
+          <a href="#">Tap To Watch</a>
+        </div>
+
+        {/* Team Shop bar */}
+        <div className="nba-teamshop">
+          <div className="nba-teamshop-inner">
+            <div className="nba-teamshop-left">
+              <div className="knicks-logo">🏀</div>
+              <div className="teamshop-text">
+                <div className="ts-title">TEAM SHOP</div>
+                <div className="ts-sub">A <em>Fanatics</em> Experience</div>
+              </div>
+            </div>
+            <div className="nba-teamshop-center">
+              <span className="badge-nba">NBA</span>
+              <span className="badge-amex">AMEX</span>
+            </div>
+            <div className="nba-teamshop-right">
+              <span aria-hidden>👤</span>
+              <span className="nba-cart" aria-label={`Cart with ${cart} items`}>
+                🛒<span className="nba-cart-badge">{cart}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Orange nav */}
+        <div className="nba-orangenav">
+          <div className="nba-orangenav-inner">
+            <a href="#">Men</a>
+            <a href="#">Women</a>
+            <a href="#">Kids</a>
+            <a href="#">More</a>
+            <span className="search-ico" aria-hidden>🔍</span>
+          </div>
+        </div>
+
+        {/* Quiz unlock strip (replaces SIGN UP & SAVE 10%) */}
+        <div className="nba-quizstrip">
+          QUIZ DISCOUNT UNLOCKED
+        </div>
       </header>
 
       <div className="nba-container">
