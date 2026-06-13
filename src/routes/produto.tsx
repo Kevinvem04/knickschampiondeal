@@ -224,7 +224,7 @@ function ProductPage() {
                   </div>
                   <div className="nba-price-row">
                     <span className="muted">Your quiz discount:</span>
-                    <span className="green-bold">-{fmt(discount)}</span>
+                    <span className="green-bold">-{fmt(savings)}</span>
                   </div>
                   <div className="nba-price-divider" />
                 </>
