@@ -472,9 +472,6 @@ const css = `
 .teamshop-text .ts-sub .fanatics { font-weight: 700; font-style: italic; }
 .nba-teamshop-center { display: flex; align-items: center; gap: 10px; margin-left: 8px; }
 .badge-nba { display: inline-flex; align-items: center; justify-content: center; background: #fff; border-radius: 3px; padding: 2px; }
-.badge-amex { display: inline-flex; flex-direction: column; align-items: center; justify-content: center; background: #2E77BB; color: #fff; font-family: 'Arial Black', sans-serif; font-weight: 900; font-size: 11px; line-height: 1; padding: 4px 6px; border-radius: 3px; letter-spacing: 0.5px; }
-.badge-amex .amex-top, .badge-amex .amex-bot { display: block; }
-.badge-amex .amex-bot { margin-top: 1px; }
 .nba-teamshop-right { display: flex; gap: 18px; align-items: center; color: #fff; margin-left: auto; }
 .nba-cart { position: relative; display: inline-flex; }
 .nba-cart-badge { position: absolute; top: -4px; right: -8px; background: #F58426; color: #000; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 10px; min-width: 16px; text-align: center; }
