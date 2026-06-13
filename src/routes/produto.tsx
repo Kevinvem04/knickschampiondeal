@@ -469,24 +469,25 @@ const css = `
 .nba-subnav span { color: #ccc; }
 
 /* Main bar */
-.nba-mainbar { background: #fff; border-bottom: 1px solid #e5e5e5; }
-.nba-mainbar-inner { max-width: 1280px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 24px; }
-.nba-logo { display: inline-flex; flex-shrink: 0; }
-.nba-logo img { width: 64px; height: 64px; object-fit: contain; display: block; }
+.nba-mainbar { background: #006bb6; border-bottom: 0; min-height: 100px; }
+.nba-mainbar-inner { max-width: 100%; margin: 0 auto; padding: 0 16px 0 0.3125rem; display: flex; flex-flow: row nowrap; align-items: center; gap: 20px; min-height: 100px; }
+.nba-logo { display: inline-flex; flex-shrink: 0; align-items: center; }
+.nba-logo img { width: 72px; height: 72px; object-fit: contain; display: block; }
 .nba-search { flex: 1; min-width: 0; }
-.nba-search-form { display: flex; align-items: center; border: 1px solid #c4c4c4; border-radius: 4px; overflow: hidden; background: #fff; }
-.nba-search-input { flex: 1; min-width: 0; border: 0; outline: none; padding: 12px 14px; font-size: 14px; color: #111; background: transparent; }
+.nba-search-form { display: flex; align-items: center; border-radius: 4px; overflow: hidden; background: #fff; height: 44px; }
+.nba-search-input { flex: 1; min-width: 0; border: 0; outline: none; padding: 0 14px; font-size: 14px; color: #111; background: transparent; height: 100%; font-family: 'Inter', sans-serif; }
 .nba-search-input::placeholder { color: #6b6b6b; }
-.nba-search-btn { background: transparent; border: 0; padding: 0 14px; height: 44px; display: inline-flex; align-items: center; justify-content: center; color: #111; cursor: pointer; }
+.nba-search-btn { background: transparent; border: 0; padding: 0 14px; height: 100%; display: inline-flex; align-items: center; justify-content: center; color: #111; cursor: pointer; }
 .nba-promo { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 .promo-badge { display: inline-flex; align-items: center; justify-content: center; font-family: 'Arial Black', sans-serif; font-weight: 900; border-radius: 3px; letter-spacing: 0.5px; }
 .promo-nba { background: #C8102E; color: #fff; padding: 6px 10px; font-size: 14px; }
 .promo-amex { background: #2E77BB; color: #fff; padding: 6px 10px; font-size: 12px; }
-.nba-toolbar { display: flex; align-items: center; gap: 16px; color: #111; flex-shrink: 0; }
-.nba-icon { color: #111; display: inline-flex; position: relative; }
+.nba-toolbar { display: flex; align-items: center; gap: 16px; color: #fff; flex-shrink: 0; }
+.nba-icon { color: #fff; display: inline-flex; position: relative; }
 .nba-cart-badge { position: absolute; top: -4px; right: -8px; background: #F58426; color: #000; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 10px; min-width: 16px; text-align: center; }
-@media (max-width: 768px) {
-  .nba-mainbar-inner { padding: 10px 12px; gap: 10px; flex-wrap: wrap; }
+@media (max-width: 639px) {
+  .nba-mainbar { min-height: 0; padding: 0.5em 0 0.4em; }
+  .nba-mainbar-inner { min-height: 0; padding: 0 12px; gap: 10px; flex-wrap: wrap; }
   .nba-logo img { width: 44px; height: 44px; }
   .nba-promo { display: none; }
   .nba-search { order: 3; flex-basis: 100%; }
