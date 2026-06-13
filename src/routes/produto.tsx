@@ -282,7 +282,7 @@ function ProductPage() {
 
             {/* TRUST */}
             <ul className="nba-trust">
-              <li>🚚 Free shipping on orders over $75</li>
+              <li>🚚 Free shipping on orders over $49,90</li>
               <li>🔄 Free 30-day returns</li>
               <li>🔒 100% secure payment</li>
               <li>✅ Official NBA / Nike product</li>
@@ -308,7 +308,7 @@ function ProductPage() {
               "Check the size guide if in doubt",
             ]},
             { id: "ship", label: "Shipping & returns", body: [
-              "Free shipping on orders over $75",
+              "Free shipping on orders over $49,90",
               "Delivery in 3-5 business days",
               "Free returns within 30 days",
               "Official product — authenticity guaranteed",
