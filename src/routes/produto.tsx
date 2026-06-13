@@ -93,24 +93,6 @@ function ProductPage() {
 
       {/* HEADER */}
       <header className="nba-header">
-        {/* Promo strip */}
-        <div className="nba-promo">
-          <div className="nba-promo-cell nba-promo-1">
-            <strong>WHEN THERE'S A TRIPLE-DOUBLE IN THE NBA PLAYOFFS:</strong>
-          </div>
-          <div className="nba-promo-cell nba-promo-2">
-            <div className="promo-title">AMEX® CARD MEMBERS<br /><span className="big">GET 32% OFF</span></div>
-            <div className="promo-sub">ELIGIBLE MERCH AT NBASTORE.COM*</div>
-          </div>
-          <div className="nba-promo-cell nba-promo-3">
-            <div>USE YOUR AMEX CARD<br />& CODE: <strong>AMEX32</strong></div>
-            <div className="promo-fine">*24-hour offer, starting at 9am ET the next day. Terms apply.</div>
-          </div>
-          <div className="nba-promo-cell nba-promo-4">
-            <span className="badge-nba">NBA</span>
-            <span className="badge-amex">AMEX</span>
-          </div>
-        </div>
 
         {/* Secondary nav */}
         <div className="nba-subnav">
@@ -456,22 +438,6 @@ const css = `
 /* HEADER */
 .nba-header { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
 
-/* Promo strip */
-.nba-promo { display: grid; grid-template-columns: 1.2fr 1.4fr 1.6fr 0.8fr; background: #0a2756; color: #fff; min-height: 64px; }
-.nba-promo-cell { padding: 8px 12px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid rgba(255,255,255,0.15); font-size: 11px; line-height: 1.25; }
-.nba-promo-cell:last-child { border-right: none; }
-.nba-promo-1 strong { font-weight: 800; text-transform: uppercase; font-size: 12px; }
-.nba-promo-2 { background: #001f4d; align-items: center; text-align: center; }
-.nba-promo-2 .promo-title { font-weight: 700; text-transform: uppercase; font-size: 11px; }
-.nba-promo-2 .promo-title .big { font-size: 18px; font-weight: 800; }
-.nba-promo-2 .promo-sub { font-size: 9px; opacity: 0.9; margin-top: 2px; }
-.nba-promo-3 { font-size: 11px; }
-.nba-promo-3 strong { color: #fff; font-weight: 800; }
-.nba-promo-3 .promo-fine { font-size: 8px; opacity: 0.7; margin-top: 4px; }
-.nba-promo-4 { flex-direction: row; align-items: center; justify-content: center; gap: 6px; background: #fff; }
-.badge-nba { background: #fff; color: #c8102e; font-weight: 800; font-size: 11px; padding: 4px 6px; border: 1px solid #ddd; }
-.badge-amex { background: #006fcf; color: #fff; font-weight: 800; font-size: 11px; padding: 4px 6px; letter-spacing: 0.5px; }
-
 /* Sub nav */
 .nba-subnav { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 12px 16px; background: #fff; font-size: 14px; font-weight: 600; color: #000; }
 .nba-subnav a { color: #000; text-decoration: none; }
@@ -501,9 +467,6 @@ const css = `
 .nba-quizstrip { background: #1d428a; color: #fff; text-align: center; padding: 14px; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
 
 @media (max-width: 768px) {
-  .nba-promo { grid-template-columns: 1fr 1fr 1fr 0.5fr; }
-  .nba-promo-cell { font-size: 9px; padding: 6px 8px; }
-  .nba-promo-2 .promo-title .big { font-size: 14px; }
   .nba-subnav { font-size: 13px; gap: 10px; }
   .teamshop-text .ts-title { font-size: 18px; }
   .nba-orangenav-inner { gap: 20px; padding: 12px; }
