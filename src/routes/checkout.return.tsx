@@ -32,21 +32,17 @@ function CheckoutReturn() {
           box-shadow: 0 24px 64px rgba(0,0,0,0.25);
         }
         .checkout-return-card .logo-wrap {
-          width: 64px;
-          height: 64px;
+          width: 96px;
+          height: 96px;
           margin: 0 auto 20px;
-          background: #006BB6;
-          border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 12px;
         }
         .checkout-return-card .logo-wrap img {
           width: 100%;
           height: 100%;
           object-fit: contain;
-          filter: brightness(0) invert(1);
         }
         .checkout-return-card h1 {
           font-size: 26px;
