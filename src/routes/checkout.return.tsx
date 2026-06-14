@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
+import { getStripeEnvironment } from "@/lib/stripe";
+import { sendPurchaseCapi } from "@/utils/meta-capi.functions";
 
 export const Route = createFileRoute("/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
@@ -8,6 +10,11 @@ export const Route = createFileRoute("/checkout/return")({
   }),
   component: CheckoutReturn,
 });
+
+function readCookie(name: string): string | undefined {
+  const match = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+  return match ? decodeURIComponent(match[1]) : undefined;
+}
 
 function CheckoutReturn() {
   const { session_id: sessionId } = Route.useSearch();
@@ -17,7 +24,19 @@ function CheckoutReturn() {
     if (typeof w.fbq === "function") {
       w.fbq("track", "Purchase", { currency: "USD", value: 49.9 }, { eventID: sessionId });
     }
+    // Server-side Conversions API (deduped by eventID = sessionId)
+    sendPurchaseCapi({
+      data: {
+        sessionId,
+        environment: getStripeEnvironment(),
+        eventSourceUrl: window.location.href,
+        userAgent: navigator.userAgent,
+        fbp: readCookie("_fbp"),
+        fbc: readCookie("_fbc"),
+      },
+    }).catch((err) => console.error("CAPI dispatch failed", err));
   }, [sessionId]);
+
   return (
     <div className="checkout-return-page">
       <style>{`
