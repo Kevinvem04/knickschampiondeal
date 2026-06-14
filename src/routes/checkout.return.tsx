@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
 
 export const Route = createFileRoute("/checkout/return")({
@@ -10,6 +11,13 @@ export const Route = createFileRoute("/checkout/return")({
 
 function CheckoutReturn() {
   const { session_id: sessionId } = Route.useSearch();
+  useEffect(() => {
+    if (!sessionId) return;
+    const w = window as unknown as { fbq?: (...args: unknown[]) => void };
+    if (typeof w.fbq === "function") {
+      w.fbq("track", "Purchase", { currency: "USD", value: 49.9 }, { eventID: sessionId });
+    }
+  }, [sessionId]);
   return (
     <div className="checkout-return-page">
       <style>{`
