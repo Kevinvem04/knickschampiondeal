@@ -4,6 +4,10 @@ import jersey1 from "@/assets/jersey-1.png.asset.json";
 import jersey2 from "@/assets/jersey-2.png.asset.json";
 import jersey3 from "@/assets/jersey-3.png.asset.json";
 import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
+import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+
+const PRICE_ID = "knicks_brunson_jersey_icon_one_time";
 
 export const Route = createFileRoute("/produto")({
   head: () => ({
@@ -36,6 +40,7 @@ function ProductPage() {
   const [showSticky, setShowSticky] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState<{ x: number; y: number; on: boolean }>({ x: 50, y: 50, on: false });
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -88,9 +93,35 @@ function ProductPage() {
     setTimeout(() => setAdded(false), 1500);
   };
 
+  const handleBuy = () => {
+    if (!canBuy) return;
+    setCheckoutOpen(true);
+  };
+
   return (
     <div className="nba-page">
       <style>{css}</style>
+      <PaymentTestModeBanner />
+
+      {checkoutOpen && (
+        <div
+          onClick={() => setCheckoutOpen(false)}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.7)", zIndex: 9999, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "40px 16px", overflowY: "auto" }}
+        >
+          <div onClick={(e) => e.stopPropagation()} style={{ background: "#fff", borderRadius: 12, maxWidth: 720, width: "100%", padding: 16, position: "relative" }}>
+            <button
+              onClick={() => setCheckoutOpen(false)}
+              style={{ position: "absolute", top: 12, right: 12, background: "transparent", border: "none", fontSize: 24, cursor: "pointer", color: "#333", zIndex: 2 }}
+              aria-label="Fechar"
+            >×</button>
+            <StripeEmbeddedCheckout
+              priceId={PRICE_ID}
+              quantity={qty}
+              size={size ?? undefined}
+            />
+          </div>
+        </div>
+      )}
 
       {/* HEADER */}
       <header className="nba-header">
@@ -262,7 +293,7 @@ function ProductPage() {
             >
               {added ? "✓ ADDED TO CART" : "ADD TO CART"}
             </button>
-            <button className="nba-btn nba-btn-buy" disabled={!canBuy}>
+            <button className="nba-btn nba-btn-buy" disabled={!canBuy} onClick={handleBuy}>
               BUY NOW
             </button>
 
