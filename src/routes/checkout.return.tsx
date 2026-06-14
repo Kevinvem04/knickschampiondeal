@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
 
 export const Route = createFileRoute("/checkout/return")({
