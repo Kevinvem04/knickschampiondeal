@@ -56,6 +56,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         line_items: lineItems,
         mode: "payment",
         ui_mode: "embedded_page",
+        redirect_on_completion: "if_required",
         return_url: data.returnUrl,
         ...(data.customerEmail && { customer_email: data.customerEmail }),
         shipping_address_collection: {
