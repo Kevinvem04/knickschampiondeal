@@ -100,16 +100,24 @@ function ProductPage() {
 
   const canBuy = !!size && !expired;
 
-  const handleAdd = () => {
-    if (!canBuy) return;
-    setAdded(true);
-    setCart((c) => c + qty);
-    setTimeout(() => setAdded(false), 1500);
+  const buildItems = () => {
+    const items: { priceId: string; quantity: number; size?: string }[] = [
+      { priceId: PRICE_ID, quantity: qty, size: size ?? undefined },
+    ];
+    for (const r of RELATED) {
+      const q = extras[r.id] || 0;
+      if (q > 0) items.push({ priceId: r.priceId, quantity: q });
+    }
+    return items;
   };
 
   const handleBuy = () => {
     if (!canBuy) return;
     setCheckoutOpen(true);
+  };
+
+  const toggleExtra = (id: string) => {
+    setExtras((e) => ({ ...e, [id]: e[id] ? 0 : 1 }));
   };
 
   return (
@@ -128,11 +136,7 @@ function ProductPage() {
               style={{ position: "absolute", top: 12, right: 12, background: "transparent", border: "none", fontSize: 24, cursor: "pointer", color: "#333", zIndex: 2 }}
               aria-label="Fechar"
             >×</button>
-            <StripeEmbeddedCheckout
-              priceId={PRICE_ID}
-              quantity={qty}
-              size={size ?? undefined}
-            />
+            <StripeEmbeddedCheckout items={buildItems()} />
           </div>
         </div>
       )}
@@ -159,13 +163,13 @@ function ProductPage() {
                 <circle cx="12" cy="8" r="4"/>
                 <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
               </svg>
-              <span className="nba-cart" aria-label={`Cart with ${cart} items`}>
+              <span className="nba-cart" aria-label={`Cart with ${cartCount} items`}>
                 <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
                   <path d="M3 5h3l2.4 12.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.5L22 8H7"/>
                   <circle cx="10" cy="22" r="1.2"/>
                   <circle cx="19" cy="22" r="1.2"/>
                 </svg>
-                <span className="nba-cart-badge">{cart}</span>
+                <span className="nba-cart-badge">{cartCount}</span>
               </span>
             </div>
           </div>
