@@ -71,15 +71,30 @@ function CheckoutReturn() {
         fbc: readCookie("_fbc"),
       },
     }).catch((err) => console.error("CAPI dispatch failed", err));
-    // UTMify server-side order
-    sendUtmifyOrder({
-      data: {
-        sessionId,
-        environment,
-        userAgent: navigator.userAgent,
-        tracking: readTracking(),
-      },
-    }).catch((err) => console.error("UTMify dispatch failed", err));
+    // UTMify server-side order — fetch public IP first (UTMify requires customer.ip)
+    (async () => {
+      let ip: string | undefined;
+      try {
+        const r = await fetch("https://api.ipify.org?format=json");
+        const j = (await r.json()) as { ip?: string };
+        ip = j.ip;
+      } catch {
+        // ignore
+      }
+      try {
+        await sendUtmifyOrder({
+          data: {
+            sessionId,
+            environment,
+            ip,
+            userAgent: navigator.userAgent,
+            tracking: readTracking(),
+          },
+        });
+      } catch (err) {
+        console.error("UTMify dispatch failed", err);
+      }
+    })();
   }, [sessionId]);
 
   return (
