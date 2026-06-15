@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
-import { trackPurchase } from "@/lib/purchase-tracking.client";
+import { trackPurchase } from "@/lib/purchase-tracking";
 
 export const Route = createFileRoute("/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
