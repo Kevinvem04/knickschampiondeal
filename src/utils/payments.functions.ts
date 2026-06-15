@@ -4,6 +4,36 @@ import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "@/lib
 type CheckoutSessionResult = { clientSecret: string } | { error: string };
 
 type CartItem = { priceId: string; quantity?: number; size?: string };
+type TrackingParams = {
+  src?: string | null;
+  sck?: string | null;
+  utm_source?: string | null;
+  utm_medium?: string | null;
+  utm_campaign?: string | null;
+  utm_content?: string | null;
+  utm_term?: string | null;
+};
+
+const cleanMetaValue = (value?: string | null) => {
+  if (!value) return undefined;
+  const trimmed = value.trim();
+  return trimmed ? trimmed.slice(0, 500) : undefined;
+};
+
+const buildTrackingMetadata = (tracking?: TrackingParams) => Object.fromEntries(
+  Object.entries(tracking ?? {})
+    .map(([key, value]) => [`utmify_${key}`, cleanMetaValue(value)])
+    .filter((entry): entry is [string, string] => Boolean(entry[1])),
+);
+
+const buildClientReferenceId = (tracking?: TrackingParams) => {
+  const sanitize = (value?: string | null) => cleanMetaValue(value)?.split("::")[0].split("|").pop()?.replace(/[^A-Za-z0-9_-]/g, "") ?? "";
+  const ref = [tracking?.utm_source, tracking?.utm_medium, tracking?.utm_campaign, tracking?.utm_content, tracking?.utm_term]
+    .map(sanitize)
+    .join("__")
+    .slice(0, 200);
+  return ref.replace(/_/g, "") ? ref : undefined;
+};
 
 export const createCheckoutSession = createServerFn({ method: "POST" })
   .inputValidator((data: {
@@ -14,6 +44,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     customerEmail?: string;
     returnUrl: string;
     environment: StripeEnv;
+    tracking?: TrackingParams;
   }) => {
     const items: CartItem[] = data.items && data.items.length > 0
       ? data.items
@@ -51,6 +82,9 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       const description = descriptions.length === 1
         ? descriptions[0]
         : `Knicks Bundle: ${descriptions.join(" + ")}`.slice(0, 500);
+      const trackingMeta = buildTrackingMetadata(data.tracking);
+      const metadata = { ...sizeMeta, ...trackingMeta };
+      const clientReferenceId = buildClientReferenceId(data.tracking);
 
       const session = await stripe.checkout.sessions.create({
         line_items: lineItems,
@@ -58,15 +92,16 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         ui_mode: "embedded_page",
         redirect_on_completion: "if_required",
         return_url: data.returnUrl,
+        ...(clientReferenceId && { client_reference_id: clientReferenceId }),
         ...(data.customerEmail && { customer_email: data.customerEmail }),
         shipping_address_collection: {
           allowed_countries: ["BR", "US", "CA", "GB", "PT", "ES", "FR", "DE", "IT", "MX", "AR", "CL", "CO", "AU"],
         },
         payment_intent_data: {
           description,
-          ...(Object.keys(sizeMeta).length > 0 && { metadata: sizeMeta }),
+          ...(Object.keys(metadata).length > 0 && { metadata }),
         },
-        metadata: sizeMeta,
+        metadata,
       });
 
       return { clientSecret: session.client_secret ?? "" };

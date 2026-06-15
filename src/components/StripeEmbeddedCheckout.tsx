@@ -34,6 +34,7 @@ export function StripeEmbeddedCheckout({ priceId, quantity, size, items, custome
         customerEmail,
         returnUrl: returnUrl || `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
         environment: getStripeEnvironment(),
+        tracking: trackingSnapshotRef.current.tracking,
       },
     });
     if ("error" in result) throw new Error(result.error);
