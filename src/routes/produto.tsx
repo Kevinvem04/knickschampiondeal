@@ -4,10 +4,23 @@ import jersey1 from "@/assets/jersey-1.png.asset.json";
 import jersey2 from "@/assets/jersey-2.png.asset.json";
 import jersey3 from "@/assets/jersey-3.png.asset.json";
 import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
+import hoodieImg from "@/assets/hoodie.avif.asset.json";
+import snapbackImg from "@/assets/snapback.avif.asset.json";
+import tshirtImg from "@/assets/tshirt.avif.asset.json";
+import mvpShirtImg from "@/assets/mvp-shirt.webp.asset.json";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 
 const PRICE_ID = "knicks_brunson_jersey_icon_one_time";
+
+type RelatedProduct = { id: string; n: string; p: number; img: string; priceId: string };
+
+const RELATED: RelatedProduct[] = [
+  { id: "hoodie", n: "Knicks 2026 Champions Hoodie", p: 89.9, img: hoodieImg.url, priceId: "knicks_champions_hoodie_onetime" },
+  { id: "snapback", n: "Knicks Finals Snapback Cap", p: 39.9, img: snapbackImg.url, priceId: "knicks_finals_snapback_onetime" },
+  { id: "tshirt", n: "Knicks Champions T-Shirt", p: 34.9, img: tshirtImg.url, priceId: "knicks_champions_tshirt_onetime" },
+  { id: "mvp", n: "Knicks NBA Finals MVP 2026 Shirt", p: 44.9, img: mvpShirtImg.url, priceId: "knicks_mvp_shirt_onetime" },
+];
 
 export const Route = createFileRoute("/produto")({
   head: () => ({
@@ -32,8 +45,6 @@ function ProductPage() {
   const [size, setSize] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
   const [activeThumb, setActiveThumb] = useState(0);
-  const [cart, setCart] = useState(1);
-  const [added, setAdded] = useState(false);
   const [wished, setWished] = useState(false);
   const [open, setOpen] = useState<Record<string, boolean>>({ details: true, fit: false, ship: false });
   const [timeLeft, setTimeLeft] = useState(15 * 60);
@@ -41,6 +52,9 @@ function ProductPage() {
   const panelRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState<{ x: number; y: number; on: boolean }>({ x: 50, y: 50, on: false });
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [extras, setExtras] = useState<Record<string, number>>({});
+  const cartCount = 1 + Object.values(extras).reduce((s, n) => s + n, 0);
+  const extrasTotal = RELATED.reduce((s, r) => s + (extras[r.id] || 0) * r.p, 0);
 
   useEffect(() => {
     try {
@@ -86,16 +100,24 @@ function ProductPage() {
 
   const canBuy = !!size && !expired;
 
-  const handleAdd = () => {
-    if (!canBuy) return;
-    setAdded(true);
-    setCart((c) => c + qty);
-    setTimeout(() => setAdded(false), 1500);
+  const buildItems = () => {
+    const items: { priceId: string; quantity: number; size?: string }[] = [
+      { priceId: PRICE_ID, quantity: qty, size: size ?? undefined },
+    ];
+    for (const r of RELATED) {
+      const q = extras[r.id] || 0;
+      if (q > 0) items.push({ priceId: r.priceId, quantity: q });
+    }
+    return items;
   };
 
   const handleBuy = () => {
     if (!canBuy) return;
     setCheckoutOpen(true);
+  };
+
+  const toggleExtra = (id: string) => {
+    setExtras((e) => ({ ...e, [id]: e[id] ? 0 : 1 }));
   };
 
   return (
@@ -114,11 +136,7 @@ function ProductPage() {
               style={{ position: "absolute", top: 12, right: 12, background: "transparent", border: "none", fontSize: 24, cursor: "pointer", color: "#333", zIndex: 2 }}
               aria-label="Fechar"
             >×</button>
-            <StripeEmbeddedCheckout
-              priceId={PRICE_ID}
-              quantity={qty}
-              size={size ?? undefined}
-            />
+            <StripeEmbeddedCheckout items={buildItems()} />
           </div>
         </div>
       )}
@@ -145,13 +163,13 @@ function ProductPage() {
                 <circle cx="12" cy="8" r="4"/>
                 <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
               </svg>
-              <span className="nba-cart" aria-label={`Cart with ${cart} items`}>
+              <span className="nba-cart" aria-label={`Cart with ${cartCount} items`}>
                 <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden>
                   <path d="M3 5h3l2.4 12.2a2 2 0 0 0 2 1.6h8.2a2 2 0 0 0 2-1.5L22 8H7"/>
                   <circle cx="10" cy="22" r="1.2"/>
                   <circle cx="19" cy="22" r="1.2"/>
                 </svg>
-                <span className="nba-cart-badge">{cart}</span>
+                <span className="nba-cart-badge">{cartCount}</span>
               </span>
             </div>
           </div>
@@ -286,15 +304,8 @@ function ProductPage() {
             )}
 
             {/* BUTTONS */}
-            <button
-              className={`nba-btn nba-btn-cart ${added ? "added" : ""}`}
-              disabled={!canBuy}
-              onClick={handleAdd}
-            >
-              {added ? "✓ ADDED TO CART" : "ADD TO CART"}
-            </button>
             <button className="nba-btn nba-btn-buy" disabled={!canBuy} onClick={handleBuy}>
-              BUY NOW
+              {extrasTotal > 0 ? `BUY ALL — $${(finalPrice * qty + extrasTotal).toFixed(2)}` : "BUY NOW"}
             </button>
 
             {/* COUNTDOWN */}
@@ -409,20 +420,24 @@ function ProductPage() {
       <section className="nba-related">
         <div className="nba-container">
           <h2>YOU MAY ALSO LIKE</h2>
+          <p className="nba-related-hint">Add items to buy together in a single checkout</p>
           <div className="nba-related-grid">
-            {[
-              { n: "Knicks 2026 Champions Hoodie", p: 89.9, img: jersey2.url },
-              { n: "Knicks Finals Snapback Cap", p: 39.9, img: jersey3.url },
-              { n: "Knicks Champions T-Shirt", p: 34.9, img: jersey1.url },
-              { n: "Knicks 2026 Banner Poster", p: 24.9, img: jersey2.url },
-            ].map((p) => (
-              <div key={p.n} className="nba-related-card">
-                <div className="img"><img src={p.img} alt={p.n} /></div>
-                <div className="name">{p.n}</div>
-                <div className="price">{fmt(p.p)}</div>
-                <button>Add to cart</button>
-              </div>
-            ))}
+            {RELATED.map((p) => {
+              const selected = (extras[p.id] || 0) > 0;
+              return (
+                <div key={p.id} className={`nba-related-card ${selected ? "selected" : ""}`}>
+                  <div className="img"><img src={p.img} alt={p.n} /></div>
+                  <div className="name">{p.n}</div>
+                  <div className="price">{fmt(p.p)}</div>
+                  <button
+                    className={selected ? "added" : ""}
+                    onClick={() => toggleExtra(p.id)}
+                  >
+                    {selected ? "✓ Added" : "Add to order"}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -628,6 +643,9 @@ const css = `
 .nba-related-card .name { font-size: 13px; color: #333; }
 .nba-related-card .price { font-weight: 700; color: #006BB6; }
 .nba-related-card button { background: #000; color: #fff; border: none; padding: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
+.nba-related-card.selected { outline: 2px solid #006BB6; }
+.nba-related-card button.added { background: #1DB954; }
+.nba-related-hint { color: #666; font-size: 13px; margin: -8px 0 16px; }
 
 /* FOOTER */
 .nba-footer { background: #1A1A1A; color: #fff; padding: 48px 0 24px; }

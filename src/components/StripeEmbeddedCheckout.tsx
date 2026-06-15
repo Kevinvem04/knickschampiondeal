@@ -2,21 +2,29 @@ import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import { createCheckoutSession } from "@/utils/payments.functions";
 
-interface Props {
+interface CartItem {
   priceId: string;
   quantity?: number;
   size?: string;
+}
+
+interface Props {
+  priceId?: string;
+  quantity?: number;
+  size?: string;
+  items?: CartItem[];
   customerEmail?: string;
   returnUrl?: string;
 }
 
-export function StripeEmbeddedCheckout({ priceId, quantity, size, customerEmail, returnUrl }: Props) {
+export function StripeEmbeddedCheckout({ priceId, quantity, size, items, customerEmail, returnUrl }: Props) {
   const fetchClientSecret = async (): Promise<string> => {
     const result = await createCheckoutSession({
       data: {
         priceId,
         quantity,
         size,
+        items,
         customerEmail,
         returnUrl: returnUrl || `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
         environment: getStripeEnvironment(),
