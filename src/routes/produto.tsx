@@ -4,10 +4,23 @@ import jersey1 from "@/assets/jersey-1.png.asset.json";
 import jersey2 from "@/assets/jersey-2.png.asset.json";
 import jersey3 from "@/assets/jersey-3.png.asset.json";
 import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
+import hoodieImg from "@/assets/hoodie.avif.asset.json";
+import snapbackImg from "@/assets/snapback.avif.asset.json";
+import tshirtImg from "@/assets/tshirt.avif.asset.json";
+import mvpShirtImg from "@/assets/mvp-shirt.webp.asset.json";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 
 const PRICE_ID = "knicks_brunson_jersey_icon_one_time";
+
+type RelatedProduct = { id: string; n: string; p: number; img: string; priceId: string };
+
+const RELATED: RelatedProduct[] = [
+  { id: "hoodie", n: "Knicks 2026 Champions Hoodie", p: 89.9, img: hoodieImg.url, priceId: "knicks_champions_hoodie_onetime" },
+  { id: "snapback", n: "Knicks Finals Snapback Cap", p: 39.9, img: snapbackImg.url, priceId: "knicks_finals_snapback_onetime" },
+  { id: "tshirt", n: "Knicks Champions T-Shirt", p: 34.9, img: tshirtImg.url, priceId: "knicks_champions_tshirt_onetime" },
+  { id: "mvp", n: "Knicks NBA Finals MVP 2026 Shirt", p: 44.9, img: mvpShirtImg.url, priceId: "knicks_mvp_shirt_onetime" },
+];
 
 export const Route = createFileRoute("/produto")({
   head: () => ({
@@ -32,8 +45,6 @@ function ProductPage() {
   const [size, setSize] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
   const [activeThumb, setActiveThumb] = useState(0);
-  const [cart, setCart] = useState(1);
-  const [added, setAdded] = useState(false);
   const [wished, setWished] = useState(false);
   const [open, setOpen] = useState<Record<string, boolean>>({ details: true, fit: false, ship: false });
   const [timeLeft, setTimeLeft] = useState(15 * 60);
@@ -41,6 +52,9 @@ function ProductPage() {
   const panelRef = useRef<HTMLDivElement>(null);
   const [zoom, setZoom] = useState<{ x: number; y: number; on: boolean }>({ x: 50, y: 50, on: false });
   const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [extras, setExtras] = useState<Record<string, number>>({});
+  const cartCount = 1 + Object.values(extras).reduce((s, n) => s + n, 0);
+  const extrasTotal = RELATED.reduce((s, r) => s + (extras[r.id] || 0) * r.p, 0);
 
   useEffect(() => {
     try {
