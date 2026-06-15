@@ -18,6 +18,8 @@ function toUtcString(d: Date): string {
   return d.toISOString().replace("T", " ").slice(0, 19);
 }
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const STRIPE_PAYMENT_METHOD_TO_UTMIFY: Record<string, "credit_card" | "boleto" | "pix" | "paypal"> = {
   card: "credit_card",
   boleto: "boleto",
@@ -42,9 +44,17 @@ export const sendUtmifyOrder = createServerFn({ method: "POST" })
       if (!token) return { ok: false, error: "UTMIFY_API_TOKEN not configured" };
 
       const stripe = createStripeClient(data.environment);
-      const session = await stripe.checkout.sessions.retrieve(data.sessionId, {
+      let session = await stripe.checkout.sessions.retrieve(data.sessionId, {
         expand: ["customer_details", "line_items"],
       });
+
+      for (const waitMs of [800, 1600, 3000, 5000]) {
+        if (session.payment_status === "paid") break;
+        await delay(waitMs);
+        session = await stripe.checkout.sessions.retrieve(data.sessionId, {
+          expand: ["customer_details", "line_items"],
+        });
+      }
 
       if (session.payment_status !== "paid") {
         return { ok: false, error: `Session not paid (${session.payment_status})` };
