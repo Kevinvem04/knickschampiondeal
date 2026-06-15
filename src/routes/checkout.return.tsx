@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { sendPurchaseCapi } from "@/utils/meta-capi.functions";
+import { sendUtmifyOrder } from "@/utils/utmify.functions";
 
 export const Route = createFileRoute("/checkout/return")({
   validateSearch: (search: Record<string, unknown>): { session_id?: string } => ({
@@ -16,6 +17,40 @@ function readCookie(name: string): string | undefined {
   return match ? decodeURIComponent(match[1]) : undefined;
 }
 
+function readTracking() {
+  // UTMify's UTM script persists params in localStorage / cookies. We try
+  // multiple known keys, then fall back to current URL params.
+  const keys = ["utmify", "utms", "utmify_utms"];
+  let stored: Record<string, string> = {};
+  try {
+    for (const k of keys) {
+      const raw = localStorage.getItem(k);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object") stored = { ...stored, ...parsed };
+        } catch {
+          // not JSON, skip
+        }
+      }
+    }
+  } catch {
+    // localStorage may be unavailable
+  }
+  const params = new URLSearchParams(window.location.search);
+  const pick = (k: string) =>
+    stored[k] ?? readCookie(k) ?? params.get(k) ?? null;
+  return {
+    src: pick("src"),
+    sck: pick("sck"),
+    utm_source: pick("utm_source"),
+    utm_medium: pick("utm_medium"),
+    utm_campaign: pick("utm_campaign"),
+    utm_content: pick("utm_content"),
+    utm_term: pick("utm_term"),
+  };
+}
+
 function CheckoutReturn() {
   const { session_id: sessionId } = Route.useSearch();
   useEffect(() => {
@@ -24,17 +59,27 @@ function CheckoutReturn() {
     if (typeof w.fbq === "function") {
       w.fbq("track", "Purchase", { currency: "USD", value: 49.9 }, { eventID: sessionId });
     }
+    const environment = getStripeEnvironment();
     // Server-side Conversions API (deduped by eventID = sessionId)
     sendPurchaseCapi({
       data: {
         sessionId,
-        environment: getStripeEnvironment(),
+        environment,
         eventSourceUrl: window.location.href,
         userAgent: navigator.userAgent,
         fbp: readCookie("_fbp"),
         fbc: readCookie("_fbc"),
       },
     }).catch((err) => console.error("CAPI dispatch failed", err));
+    // UTMify server-side order
+    sendUtmifyOrder({
+      data: {
+        sessionId,
+        environment,
+        userAgent: navigator.userAgent,
+        tracking: readTracking(),
+      },
+    }).catch((err) => console.error("UTMify dispatch failed", err));
   }, [sessionId]);
 
   return (
