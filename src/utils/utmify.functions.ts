@@ -67,7 +67,7 @@ export const sendUtmifyOrder = createServerFn({ method: "POST" })
             planId: null,
             planName: null,
             quantity: li.quantity ?? 1,
-            priceInCents: li.amount_total ?? 0,
+            priceInCents: Math.round((li.amount_total ?? 0) / Math.max(li.quantity ?? 1, 1)),
           }))
         : [
             {
