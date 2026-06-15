@@ -18,6 +18,13 @@ function toUtcString(d: Date): string {
   return d.toISOString().replace("T", " ").slice(0, 19);
 }
 
+const STRIPE_PAYMENT_METHOD_TO_UTMIFY: Record<string, "credit_card" | "boleto" | "pix" | "paypal"> = {
+  card: "credit_card",
+  boleto: "boleto",
+  pix: "pix",
+  paypal: "paypal",
+};
+
 export const sendUtmifyOrder = createServerFn({ method: "POST" })
   .inputValidator((data: {
     sessionId: string;
@@ -44,10 +51,13 @@ export const sendUtmifyOrder = createServerFn({ method: "POST" })
       }
 
       const totalPriceInCents = session.amount_total ?? 0;
+      const currency = (session.currency ?? "usd").toUpperCase();
       const email = session.customer_details?.email ?? "";
       const name = session.customer_details?.name ?? "Customer";
       const phone = session.customer_details?.phone ?? null;
       const country = session.customer_details?.address?.country ?? null;
+      const paymentMethodType = session.payment_method_types?.[0] ?? "card";
+      const paymentMethod = STRIPE_PAYMENT_METHOD_TO_UTMIFY[paymentMethodType] ?? "credit_card";
 
       const lineItems = session.line_items?.data ?? [];
       const products = lineItems.length
@@ -73,13 +83,15 @@ export const sendUtmifyOrder = createServerFn({ method: "POST" })
       const createdAt = toUtcString(
         session.created ? new Date(session.created * 1000) : new Date(),
       );
-      const approvedDate = toUtcString(new Date());
+      const approvedDate = toUtcString(
+        session.status === "complete" && session.created ? new Date(session.created * 1000) : new Date(),
+      );
 
       const t = data.tracking ?? {};
       const payload = {
         orderId: data.sessionId,
         platform: "Stripe",
-        paymentMethod: "credit_card",
+        paymentMethod,
         status: "paid",
         createdAt,
         approvedDate,
@@ -106,6 +118,7 @@ export const sendUtmifyOrder = createServerFn({ method: "POST" })
           totalPriceInCents,
           gatewayFeeInCents: 0,
           userCommissionInCents: totalPriceInCents,
+          currency,
         },
         isTest: data.environment === "sandbox",
       };
@@ -124,6 +137,7 @@ export const sendUtmifyOrder = createServerFn({ method: "POST" })
         console.error("UTMify order error:", res.status, text);
         return { ok: false, error: `UTMify ${res.status}: ${text}` };
       }
+      console.info("UTMify order sent", { orderId: data.sessionId, status: res.status });
       return { ok: true };
     } catch (e) {
       console.error("sendUtmifyOrder failed:", e);
