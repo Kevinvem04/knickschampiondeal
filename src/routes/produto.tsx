@@ -420,20 +420,24 @@ function ProductPage() {
       <section className="nba-related">
         <div className="nba-container">
           <h2>YOU MAY ALSO LIKE</h2>
+          <p className="nba-related-hint">Add items to buy together in a single checkout</p>
           <div className="nba-related-grid">
-            {[
-              { n: "Knicks 2026 Champions Hoodie", p: 89.9, img: jersey2.url },
-              { n: "Knicks Finals Snapback Cap", p: 39.9, img: jersey3.url },
-              { n: "Knicks Champions T-Shirt", p: 34.9, img: jersey1.url },
-              { n: "Knicks 2026 Banner Poster", p: 24.9, img: jersey2.url },
-            ].map((p) => (
-              <div key={p.n} className="nba-related-card">
-                <div className="img"><img src={p.img} alt={p.n} /></div>
-                <div className="name">{p.n}</div>
-                <div className="price">{fmt(p.p)}</div>
-                <button>Add to cart</button>
-              </div>
-            ))}
+            {RELATED.map((p) => {
+              const selected = (extras[p.id] || 0) > 0;
+              return (
+                <div key={p.id} className={`nba-related-card ${selected ? "selected" : ""}`}>
+                  <div className="img"><img src={p.img} alt={p.n} /></div>
+                  <div className="name">{p.n}</div>
+                  <div className="price">{fmt(p.p)}</div>
+                  <button
+                    className={selected ? "added" : ""}
+                    onClick={() => toggleExtra(p.id)}
+                  >
+                    {selected ? "✓ Added" : "Add to order"}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -638,7 +642,9 @@ const css = `
 .nba-related-card:hover .img img { transform: scale(1.03); }
 .nba-related-card .name { font-size: 13px; color: #333; }
 .nba-related-card .price { font-weight: 700; color: #006BB6; }
-.nba-related-card button { background: #000; color: #fff; border: none; padding: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
+.nba-related-card.selected { outline: 2px solid #006BB6; }
+.nba-related-card button.added { background: #1DB954; }
+.nba-related-hint { color: #666; font-size: 13px; margin: -8px 0 16px; }
 
 /* FOOTER */
 .nba-footer { background: #1A1A1A; color: #fff; padding: 48px 0 24px; }
