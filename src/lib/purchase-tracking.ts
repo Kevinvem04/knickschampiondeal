@@ -16,6 +16,34 @@ export function readCookie(name: string): string | undefined {
   return match ? decodeURIComponent(match[1]) : undefined;
 }
 
+function validTrackingValue(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed === "null" || trimmed === "undefined") return undefined;
+  return trimmed;
+}
+
+function readLocalStorageValue(key: string): string | undefined {
+  try {
+    const value = validTrackingValue(localStorage.getItem(key));
+    if (!value) return undefined;
+    const expiresAt = validTrackingValue(localStorage.getItem(`${key}_exp`));
+    if (expiresAt && new Date(expiresAt) < new Date()) {
+      localStorage.removeItem(key);
+      localStorage.removeItem(`${key}_exp`);
+      return undefined;
+    }
+    return value;
+  } catch {
+    return undefined;
+  }
+}
+
+function readUtmifyWindowParam(key: string): string | undefined {
+  const maybeParams = (window as unknown as { utmParams?: URLSearchParams }).utmParams;
+  return maybeParams instanceof URLSearchParams ? validTrackingValue(maybeParams.get(key)) : undefined;
+}
+
 export function readTracking(): TrackingParams {
   const keys = ["utmify", "utms", "utmify_utms"];
   let stored: Record<string, string> = {};
@@ -35,10 +63,18 @@ export function readTracking(): TrackingParams {
     // localStorage may be unavailable.
   }
   const params = new URLSearchParams(window.location.search);
-  const pick = (k: string) => stored[k] ?? readCookie(k) ?? params.get(k) ?? null;
+  const pick = (k: string) => (
+    validTrackingValue(params.get(k))
+    ?? readUtmifyWindowParam(k)
+    ?? validTrackingValue(stored[k])
+    ?? readLocalStorageValue(k)
+    ?? validTrackingValue(readCookie(k))
+    ?? null
+  );
+  const xcod = pick("xcod");
   return {
     src: pick("src"),
-    sck: pick("sck"),
+    sck: pick("sck") ?? xcod,
     utm_source: pick("utm_source"),
     utm_medium: pick("utm_medium"),
     utm_campaign: pick("utm_campaign"),
@@ -105,5 +141,7 @@ export async function trackPurchase(sessionId: string, snapshot?: PurchaseTracki
   ]);
 
   if (metaResult.status === "rejected") console.error("CAPI dispatch failed", metaResult.reason);
+  if (metaResult.status === "fulfilled" && !metaResult.value.ok) console.error("CAPI dispatch failed", metaResult.value.error);
   if (utmifyResult.status === "rejected") console.error("UTMify dispatch failed", utmifyResult.reason);
+  if (utmifyResult.status === "fulfilled" && !utmifyResult.value.ok) console.error("UTMify dispatch failed", utmifyResult.value.error);
 }
