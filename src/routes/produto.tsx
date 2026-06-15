@@ -642,6 +642,7 @@ const css = `
 .nba-related-card:hover .img img { transform: scale(1.03); }
 .nba-related-card .name { font-size: 13px; color: #333; }
 .nba-related-card .price { font-weight: 700; color: #006BB6; }
+.nba-related-card button { background: #000; color: #fff; border: none; padding: 8px; font-size: 12px; font-weight: 700; text-transform: uppercase; cursor: pointer; }
 .nba-related-card.selected { outline: 2px solid #006BB6; }
 .nba-related-card button.added { background: #1DB954; }
 .nba-related-hint { color: #666; font-size: 13px; margin: -8px 0 16px; }
