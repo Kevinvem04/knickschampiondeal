@@ -3,7 +3,7 @@ import { createStripeClient, type StripeEnv } from "@/lib/stripe.server";
 
 type UtmifyResult = { ok: true } | { ok: false; error: string };
 
-type TrackingParams = {
+export type TrackingParams = {
   src?: string | null;
   sck?: string | null;
   utm_source?: string | null;
