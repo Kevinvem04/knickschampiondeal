@@ -27,6 +27,20 @@ const STRIPE_PAYMENT_METHOD_TO_UTMIFY: Record<string, "credit_card" | "boleto" |
   paypal: "paypal",
 };
 
+function metadataTracking(metadata?: Record<string, string> | null): TrackingParams {
+  return {
+    src: metadata?.utmify_src ?? null,
+    sck: metadata?.utmify_sck ?? null,
+    utm_source: metadata?.utmify_utm_source ?? null,
+    utm_medium: metadata?.utmify_utm_medium ?? null,
+    utm_campaign: metadata?.utmify_utm_campaign ?? null,
+    utm_content: metadata?.utmify_utm_content ?? null,
+    utm_term: metadata?.utmify_utm_term ?? null,
+  };
+}
+
+const preferTracking = (primary?: string | null, fallback?: string | null) => primary ?? fallback ?? null;
+
 export const sendUtmifyOrder = createServerFn({ method: "POST" })
   .inputValidator((data: {
     sessionId: string;
@@ -97,6 +111,7 @@ export const sendUtmifyOrder = createServerFn({ method: "POST" })
         session.status === "complete" && session.created ? new Date(session.created * 1000) : new Date(),
       );
 
+      const fallbackTracking = metadataTracking(session.metadata);
       const t = data.tracking ?? {};
       const payload = {
         orderId: data.sessionId,
@@ -116,13 +131,13 @@ export const sendUtmifyOrder = createServerFn({ method: "POST" })
         },
         products,
         trackingParameters: {
-          src: t.src ?? null,
-          sck: t.sck ?? null,
-          utm_source: t.utm_source ?? null,
-          utm_medium: t.utm_medium ?? null,
-          utm_campaign: t.utm_campaign ?? null,
-          utm_content: t.utm_content ?? null,
-          utm_term: t.utm_term ?? null,
+          src: preferTracking(t.src, fallbackTracking.src),
+          sck: preferTracking(t.sck, fallbackTracking.sck),
+          utm_source: preferTracking(t.utm_source, fallbackTracking.utm_source),
+          utm_medium: preferTracking(t.utm_medium, fallbackTracking.utm_medium),
+          utm_campaign: preferTracking(t.utm_campaign, fallbackTracking.utm_campaign),
+          utm_content: preferTracking(t.utm_content, fallbackTracking.utm_content),
+          utm_term: preferTracking(t.utm_term, fallbackTracking.utm_term),
         },
         commission: {
           totalPriceInCents,
