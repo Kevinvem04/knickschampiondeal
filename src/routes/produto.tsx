@@ -304,15 +304,8 @@ function ProductPage() {
             )}
 
             {/* BUTTONS */}
-            <button
-              className={`nba-btn nba-btn-cart ${added ? "added" : ""}`}
-              disabled={!canBuy}
-              onClick={handleAdd}
-            >
-              {added ? "✓ ADDED TO CART" : "ADD TO CART"}
-            </button>
             <button className="nba-btn nba-btn-buy" disabled={!canBuy} onClick={handleBuy}>
-              BUY NOW
+              {extrasTotal > 0 ? `BUY ALL — $${(finalPrice * qty + extrasTotal).toFixed(2)}` : "BUY NOW"}
             </button>
 
             {/* COUNTDOWN */}
