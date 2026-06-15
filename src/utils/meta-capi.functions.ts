@@ -12,6 +12,7 @@ export const sendPurchaseCapi = createServerFn({ method: "POST" })
     environment: StripeEnv;
     eventSourceUrl: string;
     userAgent: string;
+    ip?: string;
     fbp?: string;
     fbc?: string;
   }) => {
@@ -45,6 +46,7 @@ export const sendPurchaseCapi = createServerFn({ method: "POST" })
       const userData: Record<string, unknown> = {
         client_user_agent: data.userAgent,
       };
+      if (data.ip) userData.client_ip_address = data.ip;
       if (email) userData.em = [sha256(email)];
       if (phone) userData.ph = [sha256(phone.replace(/\D/g, ""))];
       if (fn) userData.fn = [sha256(fn)];
