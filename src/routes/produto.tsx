@@ -8,6 +8,8 @@ import hoodieImg from "@/assets/hoodie.avif.asset.json";
 import snapbackImg from "@/assets/snapback.avif.asset.json";
 import tshirtImg from "@/assets/tshirt.avif.asset.json";
 import mvpShirtImg from "@/assets/mvp-shirt.webp.asset.json";
+import boneImg from "@/assets/bone.avif.asset.json";
+import moletomImg from "@/assets/moletom.avif.asset.json";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 
@@ -22,12 +24,12 @@ const RELATED: RelatedProduct[] = [
   { id: "mvp", n: "Knicks NBA Finals MVP 2026 Shirt", p: 44.9, img: mvpShirtImg.url, priceId: "knicks_mvp_shirt_onetime" },
 ];
 
-type BumpOption = { id: string; priceId: string; title: string; subtitle: string; price: number; originalPrice?: number; badge?: string };
+type BumpOption = { id: string; priceId: string; title: string; subtitle: string; price: number; originalPrice?: number; badge?: string; img: string };
 
 const BUMPS: BumpOption[] = [
-  { id: "bone", priceId: "knicks_bone_locker_room", title: "Boné Locker Room Champions 2026", subtitle: "O boné que o time usou na comemoração do título", price: 24.9 },
-  { id: "moletom", priceId: "knicks_moletom_champions", title: "Moletom Champions 2026", subtitle: "Pra usar o título todos os dias", price: 49.9 },
-  { id: "combo", priceId: "knicks_combo_bone_moletom", title: "COMBO Boné + Moletom", subtitle: "Economize $5 levando os dois juntos", price: 69.9, originalPrice: 74.8, badge: "MAIS POPULAR" },
+  { id: "bone", priceId: "knicks_bone_locker_room", title: "Locker Room Champions 2026 Cap", subtitle: "The exact cap the team wore celebrating the title", price: 24.9, img: boneImg.url },
+  { id: "moletom", priceId: "knicks_moletom_champions", title: "Champions 2026 Hoodie", subtitle: "Wear the championship every single day", price: 49.9, img: moletomImg.url },
+  { id: "combo", priceId: "knicks_combo_bone_moletom", title: "COMBO Cap + Hoodie", subtitle: "Save $5 when you grab both together", price: 69.9, originalPrice: 74.8, badge: "MOST POPULAR", img: moletomImg.url },
 ];
 
 export const Route = createFileRoute("/produto")({
