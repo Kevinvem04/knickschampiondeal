@@ -731,6 +731,8 @@ const css = `
 .nba-bump { display: flex; gap: 10px; align-items: flex-start; padding: 10px; border: 1.5px solid #e5e5e5; border-radius: 6px; background: #fff; cursor: pointer; margin-bottom: 8px; transition: border-color 0.15s, background 0.15s; }
 .nba-bump:hover { border-color: #F58426; }
 .nba-bump.selected { border-color: #006BB6; background: #F0F7FC; }
+.nba-bump-thumb { width: 56px; height: 56px; border-radius: 4px; overflow: hidden; background: #f5f5f5; flex-shrink: 0; }
+.nba-bump-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .nba-bump input[type="radio"] { margin-top: 3px; accent-color: #006BB6; cursor: pointer; }
 .nba-bump-body { flex: 1; min-width: 0; }
 .nba-bump-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
