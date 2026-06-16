@@ -22,6 +22,14 @@ const RELATED: RelatedProduct[] = [
   { id: "mvp", n: "Knicks NBA Finals MVP 2026 Shirt", p: 44.9, img: mvpShirtImg.url, priceId: "knicks_mvp_shirt_onetime" },
 ];
 
+type BumpOption = { id: string; priceId: string; title: string; subtitle: string; price: number; originalPrice?: number; badge?: string };
+
+const BUMPS: BumpOption[] = [
+  { id: "bone", priceId: "knicks_bone_locker_room", title: "Boné Locker Room Champions 2026", subtitle: "O boné que o time usou na comemoração do título", price: 24.9 },
+  { id: "moletom", priceId: "knicks_moletom_champions", title: "Moletom Champions 2026", subtitle: "Pra usar o título todos os dias", price: 49.9 },
+  { id: "combo", priceId: "knicks_combo_bone_moletom", title: "COMBO Boné + Moletom", subtitle: "Economize $5 levando os dois juntos", price: 69.9, originalPrice: 74.8, badge: "MAIS POPULAR" },
+];
+
 export const Route = createFileRoute("/produto")({
   head: () => ({
     meta: [
