@@ -71,10 +71,40 @@ function CheckoutReturn() {
           </button>
         </div>
       ) : (
-        <div className="checkout-return-card">
+        <div className="checkout-return-card thankyou">
           <div className="logo-wrap"><img src={knicksLogo.url} alt="New York Knicks" /></div>
-          <h1>🏆 Order Confirmed!</h1>
-          <p className="sub">Thank you for your purchase. You will receive an email with shipping details shortly.</p>
+          <div className="confirm-banner">✅ Payment received — your order is confirmed!</div>
+          <h1>🏆 Thank you, Knicks fan!</h1>
+          <p className="sub">
+            You're officially part of the <strong>2026 Championship</strong> celebration.
+            <br /><br />
+            <strong>You can relax — everything is taken care of.</strong>
+            <br />
+            We've received your payment and our team is already preparing your order with care.
+          </p>
+          <div className="next-steps">
+            <div className="step">
+              <span className="step-icon">📧</span>
+              <div>
+                <strong>Order confirmation</strong>
+                <p>A receipt is on its way to your inbox right now.</p>
+              </div>
+            </div>
+            <div className="step">
+              <span className="step-icon">📦</span>
+              <div>
+                <strong>Shipping updates by email</strong>
+                <p>As soon as your order ships, you'll receive an email with your tracking number and delivery details — straight from our New York fulfillment center.</p>
+              </div>
+            </div>
+            <div className="step">
+              <span className="step-icon">🏀</span>
+              <div>
+                <strong>Wear it with pride</strong>
+                <p>You're part of history. Let's go Knicks!</p>
+              </div>
+            </div>
+          </div>
           <p className="order-id">Order: {sessionId}</p>
           <Link to="/" className="cta">← Back to Store</Link>
           <div className="divider" />
@@ -83,6 +113,9 @@ function CheckoutReturn() {
             <span>🔒 Secure checkout</span>
             <span>✅ Official NBA product</span>
           </div>
+          <p className="support">
+            Questions about your order? Email us at <a href="mailto:support@knickschampiondeal.com">support@knickschampiondeal.com</a>
+          </p>
         </div>
       )}
     </div>
