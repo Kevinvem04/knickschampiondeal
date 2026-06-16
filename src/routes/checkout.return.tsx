@@ -40,28 +40,28 @@ function CheckoutReturn() {
         </div>
       ) : stage === "upsell" ? (
         <div className="checkout-return-card upsell">
-          <div className="confirm-banner">✅ Compra confirmada! Sua jersey está garantida.</div>
-          <div className="upsell-img"><img src={mvpShirtImg.url} alt="Always 26" /></div>
-          <div className="upsell-eyebrow">ESPERA — TEM MAIS UMA COISA.</div>
-          <h1>A camisa que representa a temporada toda.</h1>
+          <div className="confirm-banner">✅ Order confirmed! Your jersey is secured.</div>
+          <div className="upsell-img"><img src={camisaBrancaImg.url} alt="Always 26 White Tee" /></div>
+          <div className="upsell-eyebrow">WAIT — ONE MORE THING.</div>
+          <h1>The shirt that represents the entire season.</h1>
           <p className="sub">
-            Não é sobre um jogador. É sobre o time inteiro que nunca desistiu.
+            It's not about one player. It's about the whole team that never gave up.
             <br />
-            <strong>"Always 26"</strong> — o mantra que carregou os Knicks até o título.
+            <strong>"Always 26"</strong> — the mantra that carried the Knicks to the title.
             <br />
-            Edição branca, patch oficial das Finals 2026.
+            White edition, official 2026 Finals patch.
           </p>
           <div className="upsell-price">${UPSELL_PRICE.toFixed(2)}</div>
           <button className="cta" onClick={() => setStage("upsell_checkout")}>
-            SIM, QUERO A CAMISA TAMBÉM →
+            YES, ADD THE SHIRT TOO →
           </button>
           <button className="cta-ghost" onClick={() => setStage("confirmed")}>
-            Não, só a primeira já é perfeita
+            No thanks, the jersey is enough
           </button>
         </div>
       ) : stage === "upsell_checkout" ? (
         <div className="checkout-return-card upsell-checkout">
-          <h1 style={{ fontSize: 18, marginBottom: 16 }}>Finalize sua camisa Always 26</h1>
+          <h1 style={{ fontSize: 18, marginBottom: 16 }}>Complete your Always 26 shirt</h1>
           <StripeEmbeddedCheckout
             priceId={UPSELL_PRICE_ID}
             returnUrl={`${typeof window !== "undefined" ? window.location.origin : ""}/checkout/return?session_id={CHECKOUT_SESSION_ID}&upsell=done`}
