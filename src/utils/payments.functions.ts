@@ -90,7 +90,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         line_items: lineItems,
         mode: "payment",
         ui_mode: "embedded_page",
-        redirect_on_completion: "if_required",
+        redirect_on_completion: "always",
         return_url: data.returnUrl,
         ...(clientReferenceId && { client_reference_id: clientReferenceId }),
         ...(data.customerEmail && { customer_email: data.customerEmail }),
