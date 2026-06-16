@@ -319,7 +319,7 @@ function ProductPage() {
 
             {/* ORDER BUMPS */}
             <div className="nba-bumps">
-              <div className="nba-bumps-head">🎁 COMPLETE SEU KIT CHAMPIONS</div>
+              <div className="nba-bumps-head">🎁 COMPLETE YOUR CHAMPIONS KIT</div>
               {BUMPS.map((b) => {
                 const sel = bumpId === b.id;
                 return (
@@ -330,6 +330,7 @@ function ProductPage() {
                       checked={sel}
                       onChange={() => setBumpId(b.id)}
                     />
+                    <div className="nba-bump-thumb"><img src={b.img} alt={b.title} /></div>
                     <div className="nba-bump-body">
                       <div className="nba-bump-top">
                         <span className="nba-bump-title">{b.title}</span>
@@ -352,7 +353,7 @@ function ProductPage() {
                   onChange={() => setBumpId(null)}
                 />
                 <div className="nba-bump-body">
-                  <span className="nba-bump-title">Não, obrigado — só a jersey está ótima</span>
+                  <span className="nba-bump-title">No thanks — just the jersey is perfect</span>
                 </div>
               </label>
             </div>
