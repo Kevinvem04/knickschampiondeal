@@ -114,7 +114,7 @@ function ProductPage() {
 
   const canBuy = !!size && !expired;
 
-  const buildItems = () => {
+  const checkoutItems = useMemo(() => {
     const items: { priceId: string; quantity: number; size?: string }[] = [
       { priceId: PRICE_ID, quantity: qty, size: size ?? undefined },
     ];
@@ -124,7 +124,9 @@ function ProductPage() {
       if (q > 0) items.push({ priceId: r.priceId, quantity: q });
     }
     return items;
-  };
+  }, [extras, qty, selectedBump, size]);
+
+  const checkoutKey = useMemo(() => JSON.stringify(checkoutItems), [checkoutItems]);
 
   const handleBuy = () => {
     if (!canBuy) return;
@@ -151,7 +153,7 @@ function ProductPage() {
               style={{ position: "absolute", top: 12, right: 12, background: "transparent", border: "none", fontSize: 24, cursor: "pointer", color: "#333", zIndex: 2 }}
               aria-label="Fechar"
             >×</button>
-            <StripeEmbeddedCheckout items={buildItems()} />
+            <StripeEmbeddedCheckout key={checkoutKey} items={checkoutItems} />
           </div>
         </div>
       )}
