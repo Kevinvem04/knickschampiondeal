@@ -71,10 +71,40 @@ function CheckoutReturn() {
           </button>
         </div>
       ) : (
-        <div className="checkout-return-card">
+        <div className="checkout-return-card thankyou">
           <div className="logo-wrap"><img src={knicksLogo.url} alt="New York Knicks" /></div>
-          <h1>🏆 Order Confirmed!</h1>
-          <p className="sub">Thank you for your purchase. You will receive an email with shipping details shortly.</p>
+          <div className="confirm-banner">✅ Payment received — your order is confirmed!</div>
+          <h1>🏆 Thank you, Knicks fan!</h1>
+          <p className="sub">
+            You're officially part of the <strong>2026 Championship</strong> celebration.
+            <br /><br />
+            <strong>You can relax — everything is taken care of.</strong>
+            <br />
+            We've received your payment and our team is already preparing your order with care.
+          </p>
+          <div className="next-steps">
+            <div className="step">
+              <span className="step-icon">📧</span>
+              <div>
+                <strong>Order confirmation</strong>
+                <p>A receipt is on its way to your inbox right now.</p>
+              </div>
+            </div>
+            <div className="step">
+              <span className="step-icon">📦</span>
+              <div>
+                <strong>Shipping updates by email</strong>
+                <p>As soon as your order ships, you'll receive an email with your tracking number and delivery details — straight from our New York fulfillment center.</p>
+              </div>
+            </div>
+            <div className="step">
+              <span className="step-icon">🏀</span>
+              <div>
+                <strong>Wear it with pride</strong>
+                <p>You're part of history. Let's go Knicks!</p>
+              </div>
+            </div>
+          </div>
           <p className="order-id">Order: {sessionId}</p>
           <Link to="/" className="cta">← Back to Store</Link>
           <div className="divider" />
@@ -83,6 +113,9 @@ function CheckoutReturn() {
             <span>🔒 Secure checkout</span>
             <span>✅ Official NBA product</span>
           </div>
+          <p className="support">
+            Questions about your order? Email us at <a href="mailto:support@knickschampiondeal.com">support@knickschampiondeal.com</a>
+          </p>
         </div>
       )}
     </div>
@@ -129,6 +162,14 @@ const css = `
 .checkout-return-card .upsell-img img { width: 100%; height: 100%; object-fit: contain; }
 .checkout-return-card .upsell-eyebrow { color: #F58426; font-weight: 800; font-size: 13px; letter-spacing: 0.06em; margin-bottom: 10px; }
 .checkout-return-card .upsell-price { font-size: 32px; font-weight: 900; color: #006BB6; margin: 14px 0 18px; }
+.checkout-return-card.thankyou .confirm-banner { background: #E8F7EE; color: #146C2E; padding: 10px 14px; border-radius: 6px; font-size: 13px; font-weight: 700; margin-bottom: 18px; }
+.checkout-return-card .next-steps { display: flex; flex-direction: column; gap: 14px; margin: 24px 0; text-align: left; }
+.checkout-return-card .step { display: flex; gap: 12px; align-items: flex-start; background: #F7F9FC; padding: 14px; border-radius: 10px; border-left: 3px solid #F58426; }
+.checkout-return-card .step-icon { font-size: 22px; line-height: 1; flex-shrink: 0; }
+.checkout-return-card .step strong { display: block; color: #1a1a1a; font-size: 14px; margin-bottom: 4px; }
+.checkout-return-card .step p { color: #555; font-size: 13px; line-height: 1.5; margin: 0; }
+.checkout-return-card .support { font-size: 12px; color: #777; margin-top: 16px; }
+.checkout-return-card .support a { color: #006BB6; text-decoration: none; font-weight: 600; }
 @media (max-width: 480px) {
   .checkout-return-card { padding: 28px 18px; }
   .checkout-return-card h1 { font-size: 20px; }
