@@ -23,6 +23,8 @@ export default defineConfig({
         "@tanstack/router-core",
         "@tanstack/router-core/ssr/client",
         "@supabase/supabase-js",
+        "@stripe/react-stripe-js",
+        "@stripe/stripe-js",
         "seroval",
       ],
     },
