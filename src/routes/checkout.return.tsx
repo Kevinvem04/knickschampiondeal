@@ -67,7 +67,7 @@ function CheckoutReturn() {
             returnUrl={`${typeof window !== "undefined" ? window.location.origin : ""}/checkout/return?session_id={CHECKOUT_SESSION_ID}&upsell=done`}
           />
           <button className="cta-ghost" style={{ marginTop: 16 }} onClick={() => setStage("confirmed")}>
-            Pular e finalizar pedido
+            Skip and finish order
           </button>
         </div>
       ) : (
