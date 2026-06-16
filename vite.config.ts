@@ -6,13 +6,15 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { existsSync, readFileSync } from "node:fs";
+import type { IncomingMessage, ServerResponse } from "node:http";
 import { join, normalize } from "node:path";
+import type { Plugin } from "vite";
 
-function serveStaleOptimizedDeps() {
+function serveStaleOptimizedDeps(): Plugin {
   return {
     name: "serve-stale-optimized-deps",
     configureServer(server) {
-      server.middlewares.use((req, res, next) => {
+      server.middlewares.use((req: IncomingMessage, res: ServerResponse, next: () => void) => {
         if (!req.url || (req.method !== "GET" && req.method !== "HEAD")) return next();
 
         const url = new URL(req.url, "http://localhost");
