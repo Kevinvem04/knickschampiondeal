@@ -315,10 +315,51 @@ function ProductPage() {
               </div>
             )}
 
+            {/* ORDER BUMPS */}
+            <div className="nba-bumps">
+              <div className="nba-bumps-head">🎁 COMPLETE SEU KIT CHAMPIONS</div>
+              {BUMPS.map((b) => {
+                const sel = bumpId === b.id;
+                return (
+                  <label key={b.id} className={`nba-bump ${sel ? "selected" : ""}`}>
+                    <input
+                      type="radio"
+                      name="bump"
+                      checked={sel}
+                      onChange={() => setBumpId(b.id)}
+                    />
+                    <div className="nba-bump-body">
+                      <div className="nba-bump-top">
+                        <span className="nba-bump-title">{b.title}</span>
+                        {b.badge && <span className="nba-bump-badge">{b.badge}</span>}
+                      </div>
+                      <div className="nba-bump-sub">{b.subtitle}</div>
+                      <div className="nba-bump-price">
+                        {b.originalPrice && <span className="strike">{fmt(b.originalPrice)}</span>}
+                        <strong>{fmt(b.price)}</strong>
+                      </div>
+                    </div>
+                  </label>
+                );
+              })}
+              <label className={`nba-bump nba-bump-none ${bumpId === null ? "selected" : ""}`}>
+                <input
+                  type="radio"
+                  name="bump"
+                  checked={bumpId === null}
+                  onChange={() => setBumpId(null)}
+                />
+                <div className="nba-bump-body">
+                  <span className="nba-bump-title">Não, obrigado — só a jersey está ótima</span>
+                </div>
+              </label>
+            </div>
+
             {/* BUTTONS */}
             <button className="nba-btn nba-btn-buy" disabled={!canBuy} onClick={handleBuy}>
               {extrasTotal > 0 ? `BUY ALL — $${(finalPrice * qty + extrasTotal).toFixed(2)}` : "BUY NOW"}
             </button>
+
 
             {/* COUNTDOWN */}
             <div className={`nba-countdown ${expired ? "expired" : ""}`}>
