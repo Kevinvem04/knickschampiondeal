@@ -10,6 +10,7 @@ import tshirtImg from "@/assets/tshirt.avif.asset.json";
 import mvpShirtImg from "@/assets/mvp-shirt.webp.asset.json";
 import boneImg from "@/assets/bone.avif.asset.json";
 import moletomImg from "@/assets/moletom.avif.asset.json";
+import comboImg from "@/assets/combo.png.asset.json";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 
