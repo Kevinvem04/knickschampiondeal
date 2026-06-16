@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
-import mvpShirtImg from "@/assets/mvp-shirt.webp.asset.json";
+import camisaBrancaImg from "@/assets/camisa-branca.avif.asset.json";
 import { trackPurchase } from "@/lib/purchase-tracking";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 
