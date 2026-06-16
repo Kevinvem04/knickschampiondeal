@@ -115,6 +115,7 @@ function ProductPage() {
     const items: { priceId: string; quantity: number; size?: string }[] = [
       { priceId: PRICE_ID, quantity: qty, size: size ?? undefined },
     ];
+    if (selectedBump) items.push({ priceId: selectedBump.priceId, quantity: 1 });
     for (const r of RELATED) {
       const q = extras[r.id] || 0;
       if (q > 0) items.push({ priceId: r.priceId, quantity: q });
