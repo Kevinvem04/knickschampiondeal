@@ -61,8 +61,11 @@ function ProductPage() {
   const [zoom, setZoom] = useState<{ x: number; y: number; on: boolean }>({ x: 50, y: 50, on: false });
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [extras, setExtras] = useState<Record<string, number>>({});
-  const cartCount = 1 + Object.values(extras).reduce((s, n) => s + n, 0);
-  const extrasTotal = RELATED.reduce((s, r) => s + (extras[r.id] || 0) * r.p, 0);
+  const [bumpId, setBumpId] = useState<string | null>(null);
+  const selectedBump = BUMPS.find((b) => b.id === bumpId) || null;
+  const bumpTotal = selectedBump?.price ?? 0;
+  const cartCount = 1 + Object.values(extras).reduce((s, n) => s + n, 0) + (selectedBump ? 1 : 0);
+  const extrasTotal = RELATED.reduce((s, r) => s + (extras[r.id] || 0) * r.p, 0) + bumpTotal;
 
   useEffect(() => {
     try {
