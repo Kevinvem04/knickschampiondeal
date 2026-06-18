@@ -84,7 +84,10 @@ export function readTracking(): TrackingParams {
 
 export async function getPublicIp(): Promise<string | undefined> {
   try {
-    const r = await fetch("https://api.ipify.org?format=json");
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), 1500);
+    const r = await fetch("https://api.ipify.org?format=json", { signal: controller.signal });
+    clearTimeout(id);
     const j = (await r.json()) as { ip?: string };
     return j.ip;
   } catch {
