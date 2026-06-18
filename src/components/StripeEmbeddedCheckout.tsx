@@ -46,25 +46,35 @@ export function StripeEmbeddedCheckout({ priceId, quantity, size, items, custome
     );
   }
 
-  const fetchClientSecret = useCallback(async (): Promise<string> => {
-    const checkout = initialCheckoutRef.current;
-    trackingSnapshotRef.current = await capturePurchaseTrackingSnapshot();
-    const result = await createCheckoutSession({
-      data: {
-        priceId: checkout.priceId,
-        quantity: checkout.quantity,
-        size: checkout.size,
-        items: checkout.items,
-        customerEmail: checkout.customerEmail,
-        returnUrl: checkout.returnUrl || `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
-        environment: getStripeEnvironment(),
-        tracking: trackingSnapshotRef.current.tracking,
-      },
-    });
-    if ("error" in result) throw new Error(result.error);
-    if (!result.clientSecret) throw new Error("Stripe did not return a client secret");
-    checkoutSessionIdRef.current = sessionIdFromClientSecret(result.clientSecret);
-    return result.clientSecret;
+  const clientSecretPromiseRef = useRef<Promise<string> | null>(null);
+
+  const fetchClientSecret = useCallback((): Promise<string> => {
+    if (clientSecretPromiseRef.current) {
+      return clientSecretPromiseRef.current;
+    }
+
+    clientSecretPromiseRef.current = (async () => {
+      const checkout = initialCheckoutRef.current;
+      trackingSnapshotRef.current = await capturePurchaseTrackingSnapshot();
+      const result = await createCheckoutSession({
+        data: {
+          priceId: checkout.priceId,
+          quantity: checkout.quantity,
+          size: checkout.size,
+          items: checkout.items,
+          customerEmail: checkout.customerEmail,
+          returnUrl: checkout.returnUrl || `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+          environment: getStripeEnvironment(),
+          tracking: trackingSnapshotRef.current?.tracking,
+        },
+      });
+      if ("error" in result) throw new Error(result.error);
+      if (!result.clientSecret) throw new Error("Stripe did not return a client secret");
+      checkoutSessionIdRef.current = sessionIdFromClientSecret(result.clientSecret);
+      return result.clientSecret;
+    })();
+
+    return clientSecretPromiseRef.current;
   }, []);
 
   const onComplete = useCallback(() => {
