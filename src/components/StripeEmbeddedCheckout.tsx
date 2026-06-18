@@ -1,5 +1,5 @@
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import { capturePurchaseTrackingSnapshot, sessionIdFromClientSecret, trackPurchase, type PurchaseTrackingSnapshot } from "@/lib/purchase-tracking";
@@ -98,9 +98,11 @@ export function StripeEmbeddedCheckout({ priceId, quantity, size, items, custome
     );
   }
 
+  const checkoutOptions = useMemo(() => ({ clientSecret, onComplete }), [clientSecret, onComplete]);
+
   return (
     <div id="checkout">
-      <EmbeddedCheckoutProvider stripe={getStripe()} options={{ clientSecret, onComplete }}>
+      <EmbeddedCheckoutProvider stripe={getStripe()} options={checkoutOptions}>
         <EmbeddedCheckout />
       </EmbeddedCheckoutProvider>
     </div>
