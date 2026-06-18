@@ -63,19 +63,12 @@ export function StripeEmbeddedCheckout({ priceId, quantity, size, items, custome
     trackPurchase(checkoutSessionIdRef.current, trackingSnapshotRef.current, initialCheckoutRef.current.estimatedTotal).catch((err) => console.error("Purchase tracking failed", err));
   }, []);
 
+  const checkoutOptions = useMemo(() => ({ clientSecret: clientSecret || "", onComplete }), [clientSecret, onComplete]);
+
   if (isMissingKey) {
     return (
       <div style={{ padding: 40, textAlign: "center", background: "#fff", borderRadius: 8, fontFamily: "sans-serif" }}>
         <h2 style={{ color: "#F58426", fontSize: 24, marginBottom: 12 }}>Stripe Checkout (Mock Local)</h2>
-        <p style={{ color: "#666", marginBottom: 24, lineHeight: 1.5 }}>
-          As chaves do Stripe são gerenciadas pelo Lovable Cloud e não estão presentes no seu ambiente local.<br/>
-          Para testar o checkout real, insira chaves de teste no <code>.env</code>.
-        </p>
-        <button 
-          onClick={() => alert("Isso simularia o sucesso do checkout no ambiente real!")} 
-          style={{ padding: "12px 24px", background: "#006BB6", color: "white", border: "none", borderRadius: 4, cursor: "pointer", fontWeight: "bold" }}>
-          Simular Sucesso (Local)
-        </button>
       </div>
     );
   }
@@ -83,7 +76,7 @@ export function StripeEmbeddedCheckout({ priceId, quantity, size, items, custome
   if (error) {
     return (
       <div style={{ padding: 40, textAlign: "center", background: "#fff", borderRadius: 8, color: "#d32f2f" }}>
-        <h2>Erro ao carregar pagamento</h2>
+        <h2>Error loading payment</h2>
         <p>{error instanceof Error ? error.message : "Erro desconhecido"}</p>
       </div>
     );
@@ -92,13 +85,11 @@ export function StripeEmbeddedCheckout({ priceId, quantity, size, items, custome
   if (isPending || !clientSecret) {
     return (
       <div style={{ padding: 60, textAlign: "center", background: "#fff", borderRadius: 8 }}>
-        <h3 style={{ color: "#333", marginBottom: 16 }}>Carregando Pagamento Seguro...</h3>
-        <p style={{ color: "#666" }}>Por favor, aguarde enquanto conectamos com a Stripe.</p>
+        <h3 style={{ color: "#333", marginBottom: 16 }}>Please Wait...</h3>
+        <p style={{ color: "#666" }}>While we connect to your payment</p>
       </div>
     );
   }
-
-  const checkoutOptions = useMemo(() => ({ clientSecret, onComplete }), [clientSecret, onComplete]);
 
   return (
     <div id="checkout">
