@@ -33,6 +33,7 @@ export function StripeEmbeddedCheckout({ priceId, quantity, size, items, custome
   const { data: clientSecret, isPending, error } = useQuery({
     queryKey: ["stripe-checkout-session", initialCheckoutRef.current],
     queryFn: async () => {
+      if (typeof window === "undefined") return null; // Não executa no SSR (evita crash do window)
       if (isMissingKey) return null; // Previne rodar o fetch real se não tiver chave
       const checkout = initialCheckoutRef.current;
       trackingSnapshotRef.current = await capturePurchaseTrackingSnapshot();
