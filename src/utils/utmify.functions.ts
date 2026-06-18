@@ -42,7 +42,7 @@ function metadataTracking(metadata?: Record<string, string> | null): TrackingPar
 const preferTracking = (primary?: string | null, fallback?: string | null) => primary ?? fallback ?? null;
 
 export const sendUtmifyOrder = createServerFn({ method: "POST" })
-  .inputValidator((data: {
+  .validator((data: {
     sessionId: string;
     environment: StripeEnv;
     ip?: string;

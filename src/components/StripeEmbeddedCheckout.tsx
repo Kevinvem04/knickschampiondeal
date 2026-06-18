@@ -8,6 +8,8 @@ interface CartItem {
   priceId: string;
   quantity?: number;
   size?: string;
+  name?: string;
+  price?: number;
 }
 
 interface Props {
@@ -17,12 +19,32 @@ interface Props {
   items?: CartItem[];
   customerEmail?: string;
   returnUrl?: string;
+  estimatedTotal?: number;
 }
 
-export function StripeEmbeddedCheckout({ priceId, quantity, size, items, customerEmail, returnUrl }: Props) {
-  const initialCheckoutRef = useRef({ priceId, quantity, size, items, customerEmail, returnUrl });
+export function StripeEmbeddedCheckout({ priceId, quantity, size, items, customerEmail, returnUrl, estimatedTotal }: Props) {
+  const initialCheckoutRef = useRef({ priceId, quantity, size, items, customerEmail, returnUrl, estimatedTotal });
   const checkoutSessionIdRef = useRef<string | undefined>(undefined);
   const trackingSnapshotRef = useRef<PurchaseTrackingSnapshot | undefined>(undefined);
+
+  const isMissingKey = !import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN;
+
+  if (isMissingKey) {
+    return (
+      <div style={{ padding: 40, textAlign: "center", background: "#fff", borderRadius: 8, fontFamily: "sans-serif" }}>
+        <h2 style={{ color: "#F58426", fontSize: 24, marginBottom: 12 }}>Stripe Checkout (Mock Local)</h2>
+        <p style={{ color: "#666", marginBottom: 24, lineHeight: 1.5 }}>
+          As chaves do Stripe são gerenciadas pelo Lovable Cloud e não estão presentes no seu ambiente local.<br/>
+          Para testar o checkout real, abra o projeto pela URL de Preview do Lovable ou insira chaves de teste no <code>.env</code>.
+        </p>
+        <button 
+          onClick={() => alert("Isso simularia o sucesso do checkout no ambiente real!")} 
+          style={{ padding: "12px 24px", background: "#006BB6", color: "white", border: "none", borderRadius: 4, cursor: "pointer", fontWeight: "bold" }}>
+          Simular Sucesso (Local)
+        </button>
+      </div>
+    );
+  }
 
   const fetchClientSecret = useCallback(async (): Promise<string> => {
     const checkout = initialCheckoutRef.current;
@@ -47,7 +69,7 @@ export function StripeEmbeddedCheckout({ priceId, quantity, size, items, custome
 
   const onComplete = useCallback(() => {
     if (!checkoutSessionIdRef.current) return;
-    trackPurchase(checkoutSessionIdRef.current, trackingSnapshotRef.current).catch((err) => console.error("Purchase tracking failed", err));
+    trackPurchase(checkoutSessionIdRef.current, trackingSnapshotRef.current, initialCheckoutRef.current.estimatedTotal).catch((err) => console.error("Purchase tracking failed", err));
   }, []);
 
   const checkoutOptions = useMemo(() => ({ fetchClientSecret, onComplete }), [fetchClientSecret, onComplete]);

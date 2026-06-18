@@ -1,37 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
-import jersey1 from "@/assets/jersey-1.png.asset.json";
-import jersey2 from "@/assets/jersey-2.png.asset.json";
-import jersey3 from "@/assets/jersey-3.png.asset.json";
-import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
-import hoodieImg from "@/assets/hoodie.avif.asset.json";
-import snapbackImg from "@/assets/snapback.avif.asset.json";
-import tshirtImg from "@/assets/tshirt.avif.asset.json";
-import mvpShirtImg from "@/assets/mvp-shirt.webp.asset.json";
-import boneImg from "@/assets/bone.avif.asset.json";
-import moletomImg from "@/assets/moletom.avif.asset.json";
-import comboImg from "@/assets/combo.png.asset.json";
+import jersey1 from "@/assets/image_2.png";
+import jersey2 from "@/assets/image_3.png";
+import jersey3 from "@/assets/image_4.png";
+import knicksLogo from "@/assets/image_1.svg";
+import hoodieImg from "@/assets/image_10.avif";
+import snapbackImg from "@/assets/image_11.avif";
+import tshirtImg from "@/assets/image_12.avif";
+import mvpShirtImg from "@/assets/image_13.webp";
+import boneImg from "@/assets/image_7.avif";
+import moletomImg from "@/assets/image_8.avif";
+import comboImg from "@/assets/image_5.png";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 
 const PRICE_ID = "knicks_brunson_jersey_icon_one_time";
 
 type RelatedProduct = { id: string; n: string; p: number; img: string; priceId: string };
+type BumpProduct = { id: string; n: string; sub: string; p: number; img: string; priceId: string; oldP?: number; badge?: string };
+
+const BUMPS: BumpProduct[] = [
+  { id: "cap", n: "Locker Room Champions 2026 Cap", sub: "The exact cap the team wore celebrating the title", p: 24.9, img: boneImg, priceId: "knicks_champions_cap" },
+  { id: "hoodie", n: "Champions 2026 Hoodie", sub: "Wear the championship every single day", p: 49.9, img: moletomImg, priceId: "knicks_champions_hoodie" },
+  { id: "combo", n: "COMBO Cap + Hoodie", sub: "Save $5 when you grab both together", p: 69.9, img: comboImg, priceId: "knicks_champions_combo", oldP: 74.8, badge: "MOST POPULAR" },
+];
 
 const RELATED: RelatedProduct[] = [
-  { id: "hoodie", n: "Knicks 2026 Champions Hoodie", p: 89.9, img: hoodieImg.url, priceId: "knicks_champions_hoodie_onetime" },
-  { id: "snapback", n: "Knicks Finals Snapback Cap", p: 39.9, img: snapbackImg.url, priceId: "knicks_finals_snapback_onetime" },
-  { id: "tshirt", n: "Knicks Champions T-Shirt", p: 34.9, img: tshirtImg.url, priceId: "knicks_champions_tshirt_onetime" },
-  { id: "mvp", n: "Knicks NBA Finals MVP 2026 Shirt", p: 44.9, img: mvpShirtImg.url, priceId: "knicks_mvp_shirt_onetime" },
+  { id: "hoodie", n: "Knicks 2026 Champions Hoodie", p: 89.9, img: hoodieImg, priceId: "knicks_champions_hoodie_onetime" },
+  { id: "snapback", n: "Knicks Finals Snapback Cap", p: 39.9, img: snapbackImg, priceId: "knicks_finals_snapback_onetime" },
+  { id: "tshirt", n: "Knicks Champions T-Shirt", p: 34.9, img: tshirtImg, priceId: "knicks_champions_tshirt_onetime" },
+  { id: "mvp", n: "Knicks NBA Finals MVP 2026 Shirt", p: 44.9, img: mvpShirtImg, priceId: "knicks_mvp_shirt_onetime" },
 ];
 
-type BumpOption = { id: string; priceId: string; title: string; subtitle: string; price: number; originalPrice?: number; badge?: string; img: string };
 
-const BUMPS: BumpOption[] = [
-  { id: "bone", priceId: "knicks_bone_locker_room", title: "Locker Room Champions 2026 Cap", subtitle: "The exact cap the team wore celebrating the title", price: 24.9, img: boneImg.url },
-  { id: "moletom", priceId: "knicks_moletom_champions", title: "Champions 2026 Hoodie", subtitle: "Wear the championship every single day", price: 49.9, img: moletomImg.url },
-  { id: "combo", priceId: "knicks_combo_bone_moletom", title: "COMBO Cap + Hoodie", subtitle: "Save $5 when you grab both together", price: 69.9, originalPrice: 74.8, badge: "MOST POPULAR", img: comboImg.url },
-];
 
 export const Route = createFileRoute("/produto")({
   head: () => ({
@@ -46,7 +47,7 @@ export const Route = createFileRoute("/produto")({
 const ORIGINAL_PRICE = 149.9;
 const SALE_PRICE = 59.9;
 const SIZES = ["S", "M", "L", "XL", "2XL", "3XL"];
-const IMAGES = [jersey1.url, jersey2.url, jersey3.url, jersey1.url];
+const IMAGES = [jersey1, jersey2, jersey3, jersey1];
 
 const fmt = (n: number) => `$${n.toFixed(2)}`;
 
@@ -64,11 +65,10 @@ function ProductPage() {
   const [zoom, setZoom] = useState<{ x: number; y: number; on: boolean }>({ x: 50, y: 50, on: false });
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [extras, setExtras] = useState<Record<string, number>>({});
-  const [bumpId, setBumpId] = useState<string | null>(null);
-  const selectedBump = BUMPS.find((b) => b.id === bumpId) || null;
-  const bumpTotal = selectedBump?.price ?? 0;
-  const cartCount = 1 + Object.values(extras).reduce((s, n) => s + n, 0) + (selectedBump ? 1 : 0);
-  const extrasTotal = RELATED.reduce((s, r) => s + (extras[r.id] || 0) * r.p, 0) + bumpTotal;
+  const [selectedBump, setSelectedBump] = useState<string>("none");
+  const cartCount = qty + Object.values(extras).reduce((s, n) => s + n, 0) + (selectedBump !== "none" ? 1 : 0);
+  const bumpPrice = selectedBump === "none" ? 0 : BUMPS.find(b => b.id === selectedBump)?.p || 0;
+  const extrasTotal = RELATED.reduce((s, r) => s + (extras[r.id] || 0) * r.p, 0) + bumpPrice;
 
   useEffect(() => {
     try {
@@ -115,16 +115,19 @@ function ProductPage() {
   const canBuy = !!size && !expired;
 
   const checkoutItems = useMemo(() => {
-    const items: { priceId: string; quantity: number; size?: string }[] = [
-      { priceId: PRICE_ID, quantity: qty, size: size ?? undefined },
+    const items: { priceId: string; quantity: number; size?: string; name?: string; price?: number }[] = [
+      { priceId: PRICE_ID, quantity: qty, size: size ?? undefined, name: "Knicks Jersey 2026", price: finalPrice },
     ];
-    if (selectedBump) items.push({ priceId: selectedBump.priceId, quantity: 1 });
     for (const r of RELATED) {
       const q = extras[r.id] || 0;
-      if (q > 0) items.push({ priceId: r.priceId, quantity: q });
+      if (q > 0) items.push({ priceId: r.priceId, quantity: q, name: r.n, price: r.p });
+    }
+    if (selectedBump !== "none") {
+      const b = BUMPS.find(x => x.id === selectedBump);
+      if (b) items.push({ priceId: b.priceId, quantity: 1, name: b.n, price: b.p });
     }
     return items;
-  }, [extras, qty, selectedBump, size]);
+  }, [extras, qty, size, selectedBump, finalPrice]);
 
   const checkoutKey = useMemo(() => JSON.stringify(checkoutItems), [checkoutItems]);
 
@@ -153,7 +156,7 @@ function ProductPage() {
               style={{ position: "absolute", top: 12, right: 12, background: "transparent", border: "none", fontSize: 24, cursor: "pointer", color: "#333", zIndex: 2 }}
               aria-label="Fechar"
             >×</button>
-            <StripeEmbeddedCheckout key={checkoutKey} items={checkoutItems} />
+            <StripeEmbeddedCheckout key={checkoutKey} items={checkoutItems} estimatedTotal={finalPrice * qty + extrasTotal} />
           </div>
         </div>
       )}
@@ -166,7 +169,7 @@ function ProductPage() {
         <div className="nba-teamshop">
           <div className="nba-teamshop-inner">
             <div className="nba-teamshop-left">
-              <div className="knicks-logo"><img src={knicksLogo.url} alt="New York Knicks" /></div>
+              <div className="knicks-logo"><img src={knicksLogo} alt="New York Knicks" /></div>
               <span className="ts-dot" aria-hidden>•</span>
               <div className="teamshop-text">
                 <div className="ts-title">TEAM SHOP</div>
@@ -320,40 +323,41 @@ function ProductPage() {
               </div>
             )}
 
-            {/* ORDER BUMPS */}
+
+
+            {/* BUMPS */}
             <div className="nba-bumps">
               <div className="nba-bumps-head">🎁 COMPLETE YOUR CHAMPIONS KIT</div>
-              {BUMPS.map((b) => {
-                const sel = bumpId === b.id;
-                return (
-                  <label key={b.id} className={`nba-bump ${sel ? "selected" : ""}`}>
-                    <input
-                      type="radio"
-                      name="bump"
-                      checked={sel}
-                      onChange={() => setBumpId(b.id)}
-                    />
-                    <div className="nba-bump-thumb"><img src={b.img} alt={b.title} /></div>
-                    <div className="nba-bump-body">
-                      <div className="nba-bump-top">
-                        <span className="nba-bump-title">{b.title}</span>
-                        {b.badge && <span className="nba-bump-badge">{b.badge}</span>}
-                      </div>
-                      <div className="nba-bump-sub">{b.subtitle}</div>
-                      <div className="nba-bump-price">
-                        {b.originalPrice && <span className="strike">{fmt(b.originalPrice)}</span>}
-                        <strong>{fmt(b.price)}</strong>
-                      </div>
+              {BUMPS.map((b) => (
+                <label key={b.id} className={`nba-bump ${selectedBump === b.id ? "selected" : ""}`}>
+                  <input
+                    type="radio"
+                    name="bump"
+                    checked={selectedBump === b.id}
+                    onChange={() => setSelectedBump(b.id)}
+                  />
+                  <div className="nba-bump-thumb">
+                    <img src={b.img} alt={b.n} />
+                  </div>
+                  <div className="nba-bump-body">
+                    <div className="nba-bump-top">
+                      <span className="nba-bump-title">{b.n}</span>
+                      {b.badge && <span className="nba-bump-badge">{b.badge}</span>}
                     </div>
-                  </label>
-                );
-              })}
-              <label className={`nba-bump nba-bump-none ${bumpId === null ? "selected" : ""}`}>
+                    <div className="nba-bump-sub">{b.sub}</div>
+                    <div className="nba-bump-price">
+                      {b.oldP && <span className="strike">${b.oldP.toFixed(2)}</span>}
+                      <strong>${b.p.toFixed(2)}</strong>
+                    </div>
+                  </div>
+                </label>
+              ))}
+              <label className={`nba-bump nba-bump-none ${selectedBump === "none" ? "selected" : ""}`}>
                 <input
                   type="radio"
                   name="bump"
-                  checked={bumpId === null}
-                  onChange={() => setBumpId(null)}
+                  checked={selectedBump === "none"}
+                  onChange={() => setSelectedBump("none")}
                 />
                 <div className="nba-bump-body">
                   <span className="nba-bump-title">No thanks — just the jersey is perfect</span>
@@ -527,12 +531,12 @@ function ProductPage() {
       {/* STICKY MOBILE BAR */}
       {showSticky && (
         <div className="nba-sticky-bar">
-          <div className="img"><img src={jersey1.url} alt="" /></div>
+          <div className="img"><img src={jersey1} alt="" /></div>
           <div className="info">
-            <div className="n">KNICKS JERSEY 2026</div>
-            <div className="p">{fmt(finalPrice)}</div>
+            <div className="n">KNICKS JERSEY 2026 {extrasTotal > 0 && <span style={{color: '#F58426'}}>+{cartCount - qty} items</span>}</div>
+            <div className="p">{fmt(finalPrice * qty + extrasTotal)}</div>
           </div>
-          <button disabled={!canBuy}>BUY NOW</button>
+          <button disabled={!canBuy} onClick={handleBuy}>BUY NOW</button>
         </div>
       )}
     </div>

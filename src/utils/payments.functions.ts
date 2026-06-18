@@ -3,7 +3,7 @@ import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "@/lib
 
 type CheckoutSessionResult = { clientSecret: string } | { error: string };
 
-type CartItem = { priceId: string; quantity?: number; size?: string };
+type CartItem = { priceId: string; quantity?: number; size?: string; name?: string; price?: number };
 type TrackingParams = {
   src?: string | null;
   sck?: string | null;
@@ -36,7 +36,7 @@ const buildClientReferenceId = (tracking?: TrackingParams) => {
 };
 
 export const createCheckoutSession = createServerFn({ method: "POST" })
-  .inputValidator((data: {
+  .validator((data: {
     priceId?: string;
     quantity?: number;
     size?: string;
@@ -67,7 +67,24 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
 
       for (const it of data.items) {
         const prices = await stripe.prices.list({ lookup_keys: [it.priceId] });
-        if (!prices.data.length) throw new Error(`Price not found: ${it.priceId}`);
+        if (!prices.data.length) {
+          if (it.name && it.price) {
+            lineItems.push({
+              price_data: {
+                currency: "usd",
+                product_data: { name: it.size ? `${it.name} (${it.size})` : it.name },
+                unit_amount: Math.round(it.price * 100),
+              },
+              quantity: it.quantity || 1,
+            });
+            descriptions.push(it.size ? `${it.name} (${it.size})` : it.name);
+            if (it.size) sizeMeta[`size_${it.priceId}`] = it.size;
+            continue;
+          } else {
+            throw new Error(`Price not found: ${it.priceId}`);
+          }
+        }
+        
         const stripePrice = prices.data[0];
         lineItems.push({ price: stripePrice.id, quantity: it.quantity || 1 });
 
@@ -106,6 +123,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
 
       return { clientSecret: session.client_secret ?? "" };
     } catch (error) {
+      console.error("Stripe session creation error:", error);
       return { error: getStripeErrorMessage(error) };
     }
   });

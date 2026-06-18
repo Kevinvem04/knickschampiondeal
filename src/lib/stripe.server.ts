@@ -18,9 +18,19 @@ export function getConnectionApiKey(env: StripeEnv): string {
 
 export function createStripeClient(env: StripeEnv): Stripe {
   const connectionApiKey = getConnectionApiKey(env);
+  
+  // Se for uma chave direta do Stripe, inicializa normalmente (bypass do Gateway do Lovable)
+  if (connectionApiKey.startsWith("sk_") || connectionApiKey.startsWith("rk_")) {
+    return new Stripe(connectionApiKey, {
+      // @ts-ignore
+      apiVersion: "2026-03-25.dahlia",
+    });
+  }
+
   const lovableApiKey = getEnv("LOVABLE_API_KEY");
 
   return new Stripe(connectionApiKey, {
+    // @ts-ignore
     apiVersion: "2026-03-25.dahlia",
     httpClient: Stripe.createFetchHttpClient((input, init) => {
       const stripeUrl = input instanceof Request ? input.url : input.toString();

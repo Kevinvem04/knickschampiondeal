@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import knicksLogo from "@/assets/knicks-logo.svg.asset.json";
-import camisaBrancaImg from "@/assets/camisa-branca.avif.asset.json";
+import knicksLogo from "@/assets/image_1.svg";
+import camisaBrancaImg from "@/assets/image_13.webp";
 import { trackPurchase } from "@/lib/purchase-tracking";
 import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 
@@ -33,7 +33,7 @@ function CheckoutReturn() {
 
       {!sessionId ? (
         <div className="checkout-return-card">
-          <div className="logo-wrap"><img src={knicksLogo.url} alt="New York Knicks" /></div>
+          <div className="logo-wrap"><img src={knicksLogo} alt="New York Knicks" /></div>
           <h1>No Information Found</h1>
           <p className="sub">We could not locate this order. If you believe this is an error, please contact support.</p>
           <Link to="/" className="cta">← Back to Store</Link>
@@ -41,7 +41,7 @@ function CheckoutReturn() {
       ) : stage === "upsell" ? (
         <div className="checkout-return-card upsell">
           <div className="confirm-banner">✅ Order confirmed! Your jersey is secured.</div>
-          <div className="upsell-img"><img src={camisaBrancaImg.url} alt="Always 26 White Tee" /></div>
+          <div className="upsell-img"><img src={camisaBrancaImg} alt="Always 26 White Tee" /></div>
           <div className="upsell-eyebrow">WAIT — ONE MORE THING.</div>
           <h1>The shirt that represents the entire season.</h1>
           <p className="sub">
@@ -72,7 +72,7 @@ function CheckoutReturn() {
         </div>
       ) : (
         <div className="checkout-return-card thankyou">
-          <div className="logo-wrap"><img src={knicksLogo.url} alt="New York Knicks" /></div>
+          <div className="logo-wrap"><img src={knicksLogo} alt="New York Knicks" /></div>
           <div className="confirm-banner">✅ Payment received — your order is confirmed!</div>
           <h1>🏆 Thank you, Knicks fan!</h1>
           <p className="sub">

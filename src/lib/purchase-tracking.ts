@@ -1,5 +1,4 @@
 import { getStripeEnvironment } from "@/lib/stripe";
-import { sendPurchaseCapi } from "@/utils/meta-capi.functions";
 import { sendUtmifyOrder, type TrackingParams } from "@/utils/utmify.functions";
 
 export type PurchaseTrackingSnapshot = {
@@ -108,40 +107,19 @@ export function sessionIdFromClientSecret(clientSecret: string): string | undefi
   return clientSecret.match(/^(cs_(?:test|live)_[a-zA-Z0-9]+)/)?.[1];
 }
 
-export async function trackPurchase(sessionId: string, snapshot?: PurchaseTrackingSnapshot) {
+export async function trackPurchase(sessionId: string, snapshot?: PurchaseTrackingSnapshot, totalValue?: number) {
   const tracking = snapshot ?? await capturePurchaseTrackingSnapshot();
   const environment = getStripeEnvironment();
 
-  const w = window as unknown as { fbq?: (...args: unknown[]) => void };
-  if (typeof w.fbq === "function") {
-    w.fbq("track", "Purchase", { currency: "USD", value: 59.9 }, { eventID: sessionId });
-  }
+  const utmifyResult = await sendUtmifyOrder({
+    data: {
+      sessionId,
+      environment,
+      ip: tracking.ip,
+      userAgent: tracking.userAgent,
+      tracking: tracking.tracking,
+    },
+  });
 
-  const [metaResult, utmifyResult] = await Promise.allSettled([
-    sendPurchaseCapi({
-      data: {
-        sessionId,
-        environment,
-        eventSourceUrl: tracking.eventSourceUrl,
-        userAgent: tracking.userAgent,
-        ip: tracking.ip,
-        fbp: tracking.fbp,
-        fbc: tracking.fbc,
-      },
-    }),
-    sendUtmifyOrder({
-      data: {
-        sessionId,
-        environment,
-        ip: tracking.ip,
-        userAgent: tracking.userAgent,
-        tracking: tracking.tracking,
-      },
-    }),
-  ]);
-
-  if (metaResult.status === "rejected") console.error("CAPI dispatch failed", metaResult.reason);
-  if (metaResult.status === "fulfilled" && !metaResult.value.ok) console.error("CAPI dispatch failed", metaResult.value.error);
-  if (utmifyResult.status === "rejected") console.error("UTMify dispatch failed", utmifyResult.reason);
-  if (utmifyResult.status === "fulfilled" && !utmifyResult.value.ok) console.error("UTMify dispatch failed", utmifyResult.value.error);
+  if (!utmifyResult.ok) console.error("UTMify dispatch failed", utmifyResult.error);
 }

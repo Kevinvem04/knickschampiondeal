@@ -7,7 +7,7 @@ type CapiResult = { ok: true } | { ok: false; error: string };
 const sha256 = (v: string) => createHash("sha256").update(v.trim().toLowerCase()).digest("hex");
 
 export const sendPurchaseCapi = createServerFn({ method: "POST" })
-  .inputValidator((data: {
+  .validator((data: {
     sessionId: string;
     environment: StripeEnv;
     eventSourceUrl: string;
