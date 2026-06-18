@@ -88,11 +88,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         const stripePrice = prices.data[0];
         lineItems.push({ price: stripePrice.id, quantity: it.quantity || 1 });
 
-        const productId = typeof stripePrice.product === "string"
-          ? stripePrice.product
-          : stripePrice.product.id;
-        const product = await stripe.products.retrieve(productId);
-        descriptions.push(it.size ? `${product.name} (${it.size})` : product.name);
+        const productName = it.name || "Knicks Product";
+        descriptions.push(it.size ? `${productName} (${it.size})` : productName);
         if (it.size) sizeMeta[`size_${it.priceId}`] = it.size;
       }
 
