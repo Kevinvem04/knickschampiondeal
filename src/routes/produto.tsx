@@ -19,12 +19,6 @@ const PRICE_ID = "knicks_brunson_jersey_icon_one_time";
 type RelatedProduct = { id: string; n: string; p: number; img: string; priceId: string };
 type BumpProduct = { id: string; n: string; sub: string; p: number; img: string; priceId: string; oldP?: number; badge?: string };
 
-const BUMPS: BumpProduct[] = [
-  { id: "cap", n: "Locker Room Champions 2026 Cap", sub: "The exact cap the team wore celebrating the title", p: 24.9, img: boneImg, priceId: "knicks_champions_cap" },
-  { id: "hoodie", n: "Champions 2026 Hoodie", sub: "Wear the championship every single day", p: 49.9, img: moletomImg, priceId: "knicks_champions_hoodie" },
-  { id: "combo", n: "COMBO Cap + Hoodie", sub: "Save $5 when you grab both together", p: 69.9, img: comboImg, priceId: "knicks_champions_combo", oldP: 74.8, badge: "MOST POPULAR" },
-];
-
 const RELATED: RelatedProduct[] = [
   { id: "hoodie", n: "Knicks 2026 Champions Hoodie", p: 89.9, img: hoodieImg, priceId: "knicks_champions_hoodie_onetime" },
   { id: "snapback", n: "Knicks Finals Snapback Cap", p: 39.9, img: snapbackImg, priceId: "knicks_finals_snapback_onetime" },
@@ -65,10 +59,8 @@ function ProductPage() {
   const [zoom, setZoom] = useState<{ x: number; y: number; on: boolean }>({ x: 50, y: 50, on: false });
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [extras, setExtras] = useState<Record<string, number>>({});
-  const [selectedBump, setSelectedBump] = useState<string>("none");
-  const cartCount = qty + Object.values(extras).reduce((s, n) => s + n, 0) + (selectedBump !== "none" ? 1 : 0);
-  const bumpPrice = selectedBump === "none" ? 0 : BUMPS.find(b => b.id === selectedBump)?.p || 0;
-  const extrasTotal = RELATED.reduce((s, r) => s + (extras[r.id] || 0) * r.p, 0) + bumpPrice;
+  const cartCount = qty + Object.values(extras).reduce((s, n) => s + n, 0);
+  const extrasTotal = RELATED.reduce((s, r) => s + (extras[r.id] || 0) * r.p, 0);
 
   useEffect(() => {
     try {
@@ -122,12 +114,8 @@ function ProductPage() {
       const q = extras[r.id] || 0;
       if (q > 0) items.push({ priceId: r.priceId, quantity: q, name: r.n, price: r.p });
     }
-    if (selectedBump !== "none") {
-      const b = BUMPS.find(x => x.id === selectedBump);
-      if (b) items.push({ priceId: b.priceId, quantity: 1, name: b.n, price: b.p });
-    }
     return items;
-  }, [extras, qty, size, selectedBump, finalPrice]);
+  }, [extras, qty, size, finalPrice]);
 
   const checkoutKey = useMemo(() => JSON.stringify(checkoutItems), [checkoutItems]);
 
@@ -325,45 +313,7 @@ function ProductPage() {
 
 
 
-            {/* BUMPS */}
-            <div className="nba-bumps">
-              <div className="nba-bumps-head">🎁 COMPLETE YOUR CHAMPIONS KIT</div>
-              {BUMPS.map((b) => (
-                <label key={b.id} className={`nba-bump ${selectedBump === b.id ? "selected" : ""}`}>
-                  <input
-                    type="radio"
-                    name="bump"
-                    checked={selectedBump === b.id}
-                    onChange={() => setSelectedBump(b.id)}
-                  />
-                  <div className="nba-bump-thumb">
-                    <img src={b.img} alt={b.n} />
-                  </div>
-                  <div className="nba-bump-body">
-                    <div className="nba-bump-top">
-                      <span className="nba-bump-title">{b.n}</span>
-                      {b.badge && <span className="nba-bump-badge">{b.badge}</span>}
-                    </div>
-                    <div className="nba-bump-sub">{b.sub}</div>
-                    <div className="nba-bump-price">
-                      {b.oldP && <span className="strike">${b.oldP.toFixed(2)}</span>}
-                      <strong>${b.p.toFixed(2)}</strong>
-                    </div>
-                  </div>
-                </label>
-              ))}
-              <label className={`nba-bump nba-bump-none ${selectedBump === "none" ? "selected" : ""}`}>
-                <input
-                  type="radio"
-                  name="bump"
-                  checked={selectedBump === "none"}
-                  onChange={() => setSelectedBump("none")}
-                />
-                <div className="nba-bump-body">
-                  <span className="nba-bump-title">No thanks — just the jersey is perfect</span>
-                </div>
-              </label>
-            </div>
+
 
             {/* BUTTONS */}
             <button className="nba-btn nba-btn-buy" disabled={!canBuy} onClick={handleBuy}>
@@ -733,23 +683,6 @@ const css = `
 .nba-sticky-bar button { background: #006BB6; color: #fff; border: none; padding: 12px 16px; font-weight: 700; font-size: 12px; text-transform: uppercase; cursor: pointer; }
 .nba-sticky-bar button:disabled { opacity: 0.5; }
 
-.nba-bumps { margin: 16px 0; border: 2px dashed #F58426; border-radius: 8px; padding: 12px; background: #FFF8F2; }
-.nba-bumps-head { font-size: 13px; font-weight: 800; color: #F58426; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 10px; text-align: center; }
-.nba-bump { display: flex; gap: 10px; align-items: flex-start; padding: 10px; border: 1.5px solid #e5e5e5; border-radius: 6px; background: #fff; cursor: pointer; margin-bottom: 8px; transition: border-color 0.15s, background 0.15s; }
-.nba-bump:hover { border-color: #F58426; }
-.nba-bump.selected { border-color: #006BB6; background: #F0F7FC; }
-.nba-bump-thumb { width: 56px; height: 56px; border-radius: 4px; overflow: hidden; background: #f5f5f5; flex-shrink: 0; }
-.nba-bump-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.nba-bump input[type="radio"] { margin-top: 3px; accent-color: #006BB6; cursor: pointer; }
-.nba-bump-body { flex: 1; min-width: 0; }
-.nba-bump-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.nba-bump-title { font-size: 13px; font-weight: 700; color: #1a1a1a; }
-.nba-bump-badge { background: #F58426; color: #fff; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
-.nba-bump-sub { font-size: 12px; color: #666; margin-top: 2px; }
-.nba-bump-price { margin-top: 6px; display: flex; gap: 8px; align-items: baseline; }
-.nba-bump-price .strike { text-decoration: line-through; color: #999; font-size: 12px; }
-.nba-bump-price strong { color: #006BB6; font-size: 15px; font-weight: 800; }
-.nba-bump-none { background: #fafafa; }
-.nba-bump-none .nba-bump-title { font-weight: 600; color: #666; font-size: 12px; }
+
 `;
 

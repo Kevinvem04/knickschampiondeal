@@ -61,7 +61,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     try {
       const stripe = createStripeClient(data.environment);
 
-      const lineItems: { price: string; quantity: number }[] = [];
+      const lineItems: { price?: string; price_data?: any; quantity: number }[] = [];
       const descriptions: string[] = [];
       const sizeMeta: Record<string, string> = {};
 
@@ -84,7 +84,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
             throw new Error(`Price not found: ${it.priceId}`);
           }
         }
-        
+
         const stripePrice = prices.data[0];
         lineItems.push({ price: stripePrice.id, quantity: it.quantity || 1 });
 
